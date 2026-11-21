@@ -33,7 +33,9 @@
         <div class="section-heading"><span>MAP LAYERS</span><span class="muted">PILOT CATALOGUE</span></div>
         <div class="layer-group">
           <div class="group-title"><span class="group-icon">◈</span> BASE MAP</div>
-          <label class="layer-row"><span><b>OpenStreetMap</b><small>Community map data</small></span><span class="status status-live">LIVE</span></label>
+          <label class="layer-row"><span><b>OpenStreetMap</b><small>Street map · no personal key</small></span><span class="status status-live">LIVE</span></label>
+          <label class="layer-row"><span><b>Esri World Imagery</b><small>Satellite imagery · own API key</small></span><span id="satelliteLayerStatus" class="status status-pending">KEY REQUIRED</span></label>
+          <button id="providerSettingsButton" class="provider-settings-button" type="button">SET UP MY SATELLITE API KEY</button>
         </div>
         <div class="layer-group">
           <div class="group-title"><span class="group-icon">⌖</span> CITY & INFRASTRUCTURE</div>
@@ -63,10 +65,22 @@
     <footer class="statusbar"><span><b>MP</b> MERCURY PLUS</span><span>EXPLORATORY INFORMATION ONLY · NOT FOR EMERGENCY OR SAFETY-CRITICAL USE</span><a href="https://github.com/paulafanasyev/mercury-plus" target="_blank" rel="noreferrer">SOURCE & STATUS ↗</a></footer>
   </div>
 
+  <dialog id="providerDialog">
+    <div class="dialog-head"><span class="brand-mark">M+</span><button id="closeProviderDialog" class="icon-button" aria-label="Close">×</button></div>
+    <h2>Подключить спутник</h2>
+    <p>Введите собственный ArcGIS API key. Он сохранится только в этом браузере на этом устройстве и не отправляется на сервер Mercury Plus.</p>
+    <label class="provider-key-label" for="providerApiKey">ArcGIS API key</label>
+    <input id="providerApiKey" class="provider-key-input" type="password" autocomplete="off" spellcheck="false" placeholder="Вставьте свой API key" />
+    <p class="provider-help">В ключе должен быть доступ к Static Basemap Tiles (privilege: premium:user:staticbasemaptiles). Ограничьте ключ по HTTP referrer вашим доменом в настройках Esri. Не используйте секретный серверный ключ в браузере.</p>
+    <div class="provider-actions"><button id="saveProviderKey" class="provider-save-button" type="button">СОХРАНИТЬ И ВКЛЮЧИТЬ</button><button id="clearProviderKey" class="provider-clear-button" type="button">УДАЛИТЬ КЛЮЧ</button></div>
+    <p id="providerKeyMessage" class="provider-message" aria-live="polite"></p>
+    <a href="https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/" target="_blank" rel="noreferrer">Как создать и ограничить API key ↗</a>
+    <a href="https://developers.arcgis.com/documentation/mapping-and-location-services/mapping/basemaps/introduction-static-basemap-tiles-service/" target="_blank" rel="noreferrer">Условия и документация спутниковых слоёв ↗</a>
+  </dialog>
   <dialog id="aboutDialog">
     <div class="dialog-head"><span class="brand-mark">M+</span><button id="closeAbout" class="icon-button" aria-label="Close">×</button></div>
     <h2>About this pilot</h2>
-    <p>Mercury Plus is an early public, non-commercial browser pilot for exploring Ho Chi Minh City. The pilot includes OpenStreetMap and Esri World Imagery base maps. Other city datasets are being checked for source quality, access conditions and licence requirements. Other city datasets are being checked for source quality, access conditions and licence requirements.</p>
+    <p>Mercury Plus is an early public, non-commercial browser pilot for exploring Ho Chi Minh City. The pilot includes an OpenStreetMap street map and optional Esri World Imagery satellite imagery using a visitor-provided API key. Other city datasets are being checked for source quality, access conditions and licence requirements.</p>
     <p class="dialog-note">This interface is experimental. It is not an emergency-response service and must not be used as the sole basis for safety-critical decisions.</p>
     <a href="https://github.com/paulafanasyev/mercury-plus/blob/main/docs/PILOT_PRODUCT_SPEC.md" target="_blank" rel="noreferrer">Read the pilot specification ↗</a>
   </dialog>
