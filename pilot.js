@@ -18,30 +18,9 @@
 
   const input = document.getElementById('placeSearch');
   const message = document.getElementById('searchMessage');
-  input.addEventListener('keydown', async (event) => {
+  input.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' || !input.value.trim()) return;
-    const query = input.value.trim();
-    message.textContent = 'Searching OpenStreetMap…';
-    try {
-      const url = new URL('https://nominatim.openstreetmap.org/search');
-      url.searchParams.set('q', query + ', Ho Chi Minh City, Vietnam');
-      url.searchParams.set('format', 'jsonv2');
-      url.searchParams.set('limit', '1');
-      const response = await fetch(url, { headers: { Accept: 'application/json' } });
-      if (!response.ok) throw new Error('Search unavailable');
-      const results = await response.json();
-      if (!results.length) {
-        message.textContent = 'No result found. Try a Vietnamese or English place name.';
-        return;
-      }
-      const result = results[0];
-      const lat = Number(result.lat);
-      const lon = Number(result.lon);
-      map.flyTo([lat, lon], 16, { duration: 1.1 });
-      message.textContent = result.display_name.split(',').slice(0, 3).join(', ');
-    } catch {
-      message.textContent = 'Search is temporarily unavailable. The map remains usable.';
-    }
+    message.textContent = 'Place search is not connected in this pilot yet. No external geocoding requests are sent.';
   });
 
   const dialog = document.getElementById('aboutDialog');
