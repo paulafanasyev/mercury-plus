@@ -15,3 +15,17 @@
   .map-location{position:relative;z-index:1001;min-width:0}
   .map-button{position:relative;z-index:1002;touch-action:manipulation}
 }
+
+
+/* Basemap selector */
+.map-mode-switch{display:flex;align-items:center;border-right:1px solid #2b4554;padding:0 5px;gap:3px}
+.map-mode-button{height:29px;padding:0 9px;border:1px solid transparent;background:transparent;color:#9db0ba;font:9px 'DM Mono',monospace;letter-spacing:.6px;cursor:pointer;border-radius:3px;white-space:nowrap}
+.map-mode-button.is-active{background:#173b45;border-color:#397b7c;color:#9ff0df}
+.map-mode-button:focus-visible{outline:2px solid #61d6ce;outline-offset:2px}
+@media(max-width:760px){
+  .map-toolbar{flex-wrap:wrap}
+  .map-actions{gap:0}
+  .map-mode-switch{padding:0 3px}
+  .map-mode-button{padding:0 7px;font-size:8px}
+  .map-legend{max-width:calc(100% - 20px);white-space:nowrap}
+}
