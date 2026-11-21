@@ -2,11 +2,13 @@
 
 **Public non-commercial pilot — Ho Chi Minh City, Vietnam.**
 
-Mercury Plus is an experimental browser map workspace. The current prototype connects an OpenStreetMap base map and presents a catalogue of planned city data layers. Other layers remain disabled until their source, access and licence conditions are verified.
+Mercury Plus is an experimental browser map workspace for Ho Chi Minh City. It provides an OpenStreetMap street map and optional Esri World Imagery satellite imagery. Visitors may enter their own ArcGIS API key in the browser to activate satellite tiles; the key is stored locally in that browser and is not sent to the Mercury Plus server. Other city layers remain disabled until their source, access and licence conditions are verified.
 
 ## Current pilot
 - HCMC-centered interactive map.
-- OpenStreetMap raster base layer with visible attribution.
+- OpenStreetMap street map with visible attribution.
+- Optional Esri World Imagery satellite/aerial layer using a visitor-provided ArcGIS API key.
+- Per-browser API-key settings: the key is stored in localStorage on the visitor's device and can be replaced or deleted.
 - Responsive layer catalogue and explicit pending/offline states.
 - No connected transport, weather, flood, CCTV or infrastructure feeds yet.
 - Place search is intentionally disabled until an appropriate geocoding provider and usage controls are selected.
@@ -20,6 +22,7 @@ This repository includes a static `vercel.json` configuration. A deployment is n
 ## Data and legal notes
 - The upstream God's Eye View code is MIT-licensed; preserve its required notices for any imported code.
 - Third-party data and assets have separate terms and are not automatically covered by the upstream MIT licence.
+- Esri Static Basemap Tiles require an API key with `premium:user:staticbasemaptiles`; visitors must configure their own key and restrict it by HTTP referrer in their Esri account. Browser keys are visible to the browser and must not be treated as server secrets. Review Esri pricing, quotas and attribution requirements before use.
 - OpenStreetMap attribution: © OpenStreetMap contributors. OSM data is available under the ODbL; the standard tile service has a separate usage policy.
 - The pilot is informational and experimental, not for emergency or safety-critical use.
 
