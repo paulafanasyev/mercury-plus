@@ -6,11 +6,39 @@
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>'
   });
-  const satelliteLayer = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    minZoom: 0,
-    maxZoom: 19,
-    attribution: 'Sources: Esri, Vantor, Earthstar Geographics, USDA, USGS, and the GIS User Community'
-  });
+  let satelliteLayer = null;
+  const API_KEY_STORAGE = 'mercury-plus.arcgis-api-key';
+  const satelliteStatus = document.getElementById('satelliteLayerStatus');
+  const providerDialog = document.getElementById('providerDialog');
+  const providerKeyInput = document.getElementById('providerApiKey');
+  const providerKeyMessage = document.getElementById('providerKeyMessage');
+  let savedApiKey = '';
+  try { savedApiKey = localStorage.getItem(API_KEY_STORAGE) || ''; } catch (_) {}
+
+  function createSatelliteLayer(apiKey) {
+    return L.tileLayer(
+      'https://static-map-tiles-api.arcgis.com/arcgis/rest/services/static-basemap-tiles-service/v1/arcgis/imagery/standard/static/tile/{z}/{y}/{x}?token=' + encodeURIComponent(apiKey),
+      {
+        minZoom: 0,
+        maxZoom: 19,
+        attribution: 'Imagery: Esri, Vantor, Earthstar Geographics, and the GIS User Community'
+      }
+    );
+  }
+
+  function updateSatelliteStatus(ready, label) {
+    satelliteStatus.textContent = label || (ready ? 'KEY SAVED' : 'KEY REQUIRED');
+    satelliteStatus.classList.toggle('status-live', ready);
+    satelliteStatus.classList.toggle('status-pending', !ready);
+  }
+
+  if (savedApiKey) {
+    satelliteLayer = createSatelliteLayer(savedApiKey);
+    updateSatelliteStatus(true, 'KEY SAVED');
+  } else {
+    updateSatelliteStatus(false, 'KEY REQUIRED');
+  }
+
   streetLayer.addTo(map);
 
   const streetMode = document.getElementById('streetMode');
@@ -18,6 +46,12 @@
   const baseMapStatus = document.getElementById('baseMapStatus');
   function setBaseMap(mode) {
     const satellite = mode === 'satellite';
+    if (satellite && !satelliteLayer) {
+      providerKeyMessage.textContent = 'Для спутникового режима сначала добавьте свой ArcGIS API key.';
+      providerKeyInput.value = '';
+      providerDialog.showModal();
+      return;
+    }
     if (satellite) {
       if (map.hasLayer(streetLayer)) map.removeLayer(streetLayer);
       satelliteLayer.addTo(map);
@@ -33,6 +67,50 @@
   }
   streetMode.addEventListener('click', () => setBaseMap('street'));
   satelliteMode.addEventListener('click', () => setBaseMap('satellite'));
+
+  document.getElementById('providerSettingsButton').addEventListener('click', () => {
+    providerKeyInput.value = '';
+    providerKeyMessage.textContent = savedApiKey ? 'На этом устройстве уже сохранён API key. Вставьте новый для замены или удалите текущий.' : 'Ключ ещё не добавлен.';
+    providerDialog.showModal();
+  });
+  document.getElementById('closeProviderDialog').addEventListener('click', () => providerDialog.close());
+  document.getElementById('saveProviderKey').addEventListener('click', () => {
+    const key = providerKeyInput.value.trim();
+    if (!key) {
+      providerKeyMessage.textContent = 'Вставьте API key перед сохранением.';
+      return;
+    }
+    try {
+      localStorage.setItem(API_KEY_STORAGE, key);
+      savedApiKey = key;
+      if (satelliteLayer && map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+      satelliteLayer = createSatelliteLayer(savedApiKey);
+      updateSatelliteStatus(true, 'KEY SAVED');
+      providerKeyInput.value = '';
+      providerKeyMessage.textContent = 'Ключ сохранён локально. Включаю спутниковый слой.';
+      providerDialog.close();
+      setBaseMap('satellite');
+    } catch (_) {
+      providerKeyMessage.textContent = 'Не удалось сохранить ключ в этом браузере. Проверьте настройки хранения.';
+    }
+  });
+  document.getElementById('clearProviderKey').addEventListener('click', () => {
+    try { localStorage.removeItem(API_KEY_STORAGE); } catch (_) {}
+    savedApiKey = '';
+    if (satelliteLayer && map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+    satelliteLayer = null;
+    updateSatelliteStatus(false, 'KEY REQUIRED');
+    setBaseMap('street');
+    providerKeyInput.value = '';
+    providerKeyMessage.textContent = 'Ключ удалён с этого устройства.';
+  });
+  if (satelliteLayer) {
+    satelliteLayer.on('tileerror', () => {
+      updateSatelliteStatus(false, 'CHECK API KEY');
+      baseMapStatus.textContent = 'ESRI TILE ERROR · CHECK KEY / QUOTA';
+    });
+    satelliteLayer.on('tileload', () => updateSatelliteStatus(true, 'CONNECTED'));
+  }
 
   const marker = L.circleMarker(center, {
     radius: 6, color: '#b8fff0', weight: 2, fillColor: '#42c7b7', fillOpacity: 1
