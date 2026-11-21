@@ -53,11 +53,11 @@
       <section class="map-stage" aria-label="Ho Chi Minh City map">
         <div class="map-toolbar">
           <div class="map-location"><span class="pin">⌖</span><span><b>THÀNH PHỐ HỒ CHÍ MINH</b><small>VIETNAM · INITIAL PILOT AREA</small></span></div>
-          <div class="map-actions"><button id="homeButton" class="map-button">◎ <span>RESET VIEW</span></button><button id="zoomIn" class="map-button" aria-label="Zoom in">＋</button><button id="zoomOut" class="map-button" aria-label="Zoom out">−</button></div>
+          <div class="map-actions"><div class="map-mode-switch" role="group" aria-label="Map style"><button id="streetMode" class="map-mode-button is-active" type="button" aria-pressed="true">КАРТА</button><button id="satelliteMode" class="map-mode-button" type="button" aria-pressed="false">СПУТНИК</button></div><button id="homeButton" class="map-button">◎ <span>RESET VIEW</span></button><button id="zoomIn" class="map-button" aria-label="Zoom in">＋</button><button id="zoomOut" class="map-button" aria-label="Zoom out">−</button></div>
         </div>
         <div id="map"></div>
         <div class="map-coordinates"><span>10°46'37.0"N</span><span>106°42'03.2"E</span><span class="coord-sep">·</span><span>WGS 84</span></div>
-        <div class="map-legend"><span class="legend-dot"></span> BASE MAP AVAILABLE <span class="legend-sep">|</span> <span class="legend-muted">6 CITY DATA LAYERS PENDING</span></div>
+        <div class="map-legend"><span class="legend-dot"></span> <span id="baseMapStatus">STREET MAP · LIVE</span> <span class="legend-sep">|</span> <span class="legend-muted">6 CITY DATA LAYERS PENDING</span></div>
       </section>
     </main>
     <footer class="statusbar"><span><b>MP</b> MERCURY PLUS</span><span>EXPLORATORY INFORMATION ONLY · NOT FOR EMERGENCY OR SAFETY-CRITICAL USE</span><a href="https://github.com/paulafanasyev/mercury-plus" target="_blank" rel="noreferrer">SOURCE & STATUS ↗</a></footer>
@@ -66,7 +66,7 @@
   <dialog id="aboutDialog">
     <div class="dialog-head"><span class="brand-mark">M+</span><button id="closeAbout" class="icon-button" aria-label="Close">×</button></div>
     <h2>About this pilot</h2>
-    <p>Mercury Plus is an early public, non-commercial browser pilot for exploring Ho Chi Minh City. At this stage, only the OpenStreetMap base map is connected. Other city datasets are being checked for source quality, access conditions and licence requirements.</p>
+    <p>Mercury Plus is an early public, non-commercial browser pilot for exploring Ho Chi Minh City. The pilot includes OpenStreetMap and Esri World Imagery base maps. Other city datasets are being checked for source quality, access conditions and licence requirements. Other city datasets are being checked for source quality, access conditions and licence requirements.</p>
     <p class="dialog-note">This interface is experimental. It is not an emergency-response service and must not be used as the sole basis for safety-critical decisions.</p>
     <a href="https://github.com/paulafanasyev/mercury-plus/blob/main/docs/PILOT_PRODUCT_SPEC.md" target="_blank" rel="noreferrer">Read the pilot specification ↗</a>
   </dialog>
