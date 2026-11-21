@@ -16,7 +16,7 @@ A public, non-commercial browser pilot that lets visitors explore geographic and
 - Weather and rainfall.
 - Flood/drainage context.
 
-A group is not considered implemented merely because its menu exists. Each enabled layer must load a real source and display provenance. If no suitable source is verified, show it as “Not connected yet” and keep it disabled.
+The current map uses OpenStreetMap standard raster tiles with visible attribution. The public tile service is best-effort and has no SLA; follow its tile usage policy, cache directives, referer requirements and no-bulk-download rule. Place search is intentionally not connected until a geocoder is selected and its usage policy is implemented.\n\nA group is not considered implemented merely because its menu exists. Each enabled layer must load a real source and display provenance. If no suitable source is verified, show it as “Not connected yet” and keep it disabled.
 
 ## Data status vocabulary
 - **LIVE** — provider is queried successfully and the response freshness is known.
