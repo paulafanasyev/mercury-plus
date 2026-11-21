@@ -47,8 +47,12 @@ This list is preliminary, not exhaustive. The full upstream DATA_SOURCES.md and 
 - [ ] Browser-only build and runtime checks; no Android work.
 - [ ] Verify HCMC coverage, timestamps, stale/unavailable states, and attribution in the browser.
 
-## Current status
-- Repository exists, default branch `main`, currently empty.
-- GitHub currently reports repository visibility as **Private**, contrary to the earlier Public requirement.
-- Upstream source identified: `bilawalsidhu/gods-eye-view`, default branch `main`.
-- Upstream README and LICENSE reviewed; DATA_SOURCES.md review started. This is not a complete audit and no source code or third-party assets have been copied yet.
+## Current status (2026-11-21)
+- Repository exists, default branch `main`; initial project plan and audit documents are committed.
+- GitHub reports repository visibility as **Private**, contrary to the original Public requirement. No repository-visibility write action is available in the connected GitHub integration; this remains an owner-side setting.
+- Upstream `bilawalsidhu/gods-eye-view` main was inspected at commit `ae212e5b631ed16cbe3d605abecdf105a1be8df3`; tree scan reports 5,075 entries.
+- Technical stack and scripts identified: Vue 3, Pinia, CesiumJS, Vite; `npm run build`, `npm test`, `npm run test:track` and additional QA gates.
+- First-pass third-party rights triage and mandatory exclusions documented in `docs/UPSTREAM_AUDIT.md`.
+- HCMC source-discovery catalogue documented in `docs/HCMC_DATA_CATALOG.md`; candidate sources remain PENDING individual licence/endpoint verification.
+- No source code or third-party assets have been copied. No build, browser runtime, or Vercel deployment has been performed.
+- Next critical action: establish a faithful upstream source import (preserving MIT notices and history where possible), then apply the path-level exclusion manifest before adding HCMC layers.
