@@ -29,3 +29,18 @@
   .map-mode-button{padding:0 7px;font-size:8px}
   .map-legend{max-width:calc(100% - 20px);white-space:nowrap}
 }
+
+
+/* Bring-your-own ArcGIS key dialog */
+.provider-settings-button{width:100%;margin:4px 0 2px 21px;width:calc(100% - 21px);padding:9px 10px;text-align:left;border:1px solid #31515c;background:#102a36;color:#9de7dc;font:9px 'DM Mono',monospace;letter-spacing:.5px;cursor:pointer}
+.provider-settings-button:hover{background:#173b45;border-color:#4b8d8a}
+#providerDialog{width:min(480px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto}
+.provider-key-label{display:block;margin:16px 0 7px;color:#b8ccd4;font:10px 'DM Mono',monospace;letter-spacing:.7px}
+.provider-key-input{width:100%;height:42px;padding:0 11px;background:#071722;border:1px solid #36505d;color:#e6f0f3;font:12px 'DM Mono',monospace;outline:none}
+.provider-key-input:focus{border-color:#61d6ce}
+.provider-help,.provider-message{font-size:10px!important;line-height:1.6!important}
+.provider-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.provider-save-button,.provider-clear-button{min-height:38px;padding:0 12px;border:1px solid #3b7774;background:#123b40;color:#a8eee0;font:9px 'DM Mono',monospace;cursor:pointer}
+.provider-clear-button{background:transparent;border-color:#52616a;color:#b2c1c8}
+.provider-message{min-height:18px;color:#e3b66d!important;margin:10px 0 2px!important}
+@media(max-width:760px){.provider-settings-button{margin-top:5px}.provider-actions>*{flex:1}}
