@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08131e" />
+  <meta name="description" content="Mercury Plus — public non-commercial Ho Chi Minh City map pilot." />
+  <title>Mercury Plus — Ho Chi Minh City Pilot</title>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://tile.openstreetmap.org" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="/pilot.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Mercury Plus home">
+        <span class="brand-mark">M+</span>
+        <span><strong>MERCURY</strong><small>PLUS / CITY INTELLIGENCE</small></span>
+      </a>
+      <div class="topbar-center"><span class="live-dot"></span> PUBLIC PILOT <span class="top-divider">/</span> HO CHI MINH CITY</div>
+      <div class="topbar-right"><span class="pilot-tag">NON-COMMERCIAL PREVIEW</span><button id="aboutButton" class="icon-button" aria-label="About the pilot">i</button></div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <div class="section-kicker">CITY OVERVIEW <span>01</span></div>
+        <h1>Ho Chi Minh<br><em>City</em></h1>
+        <p class="intro">A public map workspace for exploring the city and its open geographic information.</p>
+        <div class="search-wrap"><span class="search-icon">⌕</span><input id="placeSearch" type="search" placeholder="Search places / Tìm địa điểm" autocomplete="off" /><kbd>↵</kbd></div>
+        <div id="searchMessage" class="search-message" aria-live="polite"></div>
+
+        <div class="section-heading"><span>MAP LAYERS</span><span class="muted">PILOT CATALOGUE</span></div>
+        <div class="layer-group">
+          <div class="group-title"><span class="group-icon">◈</span> BASE MAP</div>
+          <label class="layer-row"><span><b>OpenStreetMap</b><small>Community map data</small></span><span class="status status-live">LIVE</span></label>
+        </div>
+        <div class="layer-group">
+          <div class="group-title"><span class="group-icon">⌖</span> CITY & INFRASTRUCTURE</div>
+          <label class="layer-row"><span><b>Administrative areas</b><small>Official boundary source pending</small></span><span class="status status-pending">PENDING</span></label>
+          <label class="layer-row"><span><b>Roads & bridges</b><small>HCMC dataset review</small></span><span class="status status-pending">PENDING</span></label>
+          <label class="layer-row"><span><b>Public facilities</b><small>Source verification</small></span><span class="status status-pending">PENDING</span></label>
+        </div>
+        <div class="layer-group">
+          <div class="group-title"><span class="group-icon">⌁</span> LIVE CONDITIONS</div>
+          <label class="layer-row"><span><b>Public transport</b><small>Feed not connected</small></span><span class="status status-off">OFFLINE</span></label>
+          <label class="layer-row"><span><b>Weather & rainfall</b><small>Provider not connected</small></span><span class="status status-off">OFFLINE</span></label>
+          <label class="layer-row"><span><b>Flood context</b><small>Official feed pending</small></span><span class="status status-off">OFFLINE</span></label>
+        </div>
+        <div class="sidebar-footer"><span class="footer-pulse"></span> PILOT DATA GATE ACTIVE <small>Unverified layers are not displayed.</small></div>
+      </aside>
+
+      <section class="map-stage" aria-label="Ho Chi Minh City map">
+        <div class="map-toolbar">
+          <div class="map-location"><span class="pin">⌖</span><span><b>THÀNH PHỐ HỒ CHÍ MINH</b><small>VIETNAM · INITIAL PILOT AREA</small></span></div>
+          <div class="map-actions"><button id="homeButton" class="map-button">◎ <span>RESET VIEW</span></button><button id="zoomIn" class="map-button" aria-label="Zoom in">＋</button><button id="zoomOut" class="map-button" aria-label="Zoom out">−</button></div>
+        </div>
+        <div id="map"></div>
+        <div class="map-coordinates"><span>10°46'37.0"N</span><span>106°42'03.2"E</span><span class="coord-sep">·</span><span>WGS 84</span></div>
+        <div class="map-legend"><span class="legend-dot"></span> BASE MAP AVAILABLE <span class="legend-sep">|</span> <span class="legend-muted">6 CITY DATA LAYERS PENDING</span></div>
+      </section>
+    </main>
+    <footer class="statusbar"><span><b>MP</b> MERCURY PLUS</span><span>EXPLORATORY INFORMATION ONLY · NOT FOR EMERGENCY OR SAFETY-CRITICAL USE</span><a href="https://github.com/paulafanasyev/mercury-plus" target="_blank" rel="noreferrer">SOURCE & STATUS ↗</a></footer>
+  </div>
+
+  <dialog id="aboutDialog">
+    <div class="dialog-head"><span class="brand-mark">M+</span><button id="closeAbout" class="icon-button" aria-label="Close">×</button></div>
+    <h2>About this pilot</h2>
+    <p>Mercury Plus is an early public, non-commercial browser pilot for exploring Ho Chi Minh City. At this stage, only the OpenStreetMap base map is connected. Other city datasets are being checked for source quality, access conditions and licence requirements.</p>
+    <p class="dialog-note">This interface is experimental. It is not an emergency-response service and must not be used as the sole basis for safety-critical decisions.</p>
+    <a href="https://github.com/paulafanasyev/mercury-plus/blob/main/docs/PILOT_PRODUCT_SPEC.md" target="_blank" rel="noreferrer">Read the pilot specification ↗</a>
+  </dialog>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="/pilot.js"></script>
+</body>
+</html>
