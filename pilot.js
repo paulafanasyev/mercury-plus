@@ -16,7 +16,7 @@
   try { savedApiKey = localStorage.getItem(API_KEY_STORAGE) || ''; } catch (_) {}
 
   function createSatelliteLayer(apiKey) {
-    return L.tileLayer(
+    const layer = L.tileLayer(
       'https://static-map-tiles-api.arcgis.com/arcgis/rest/services/static-basemap-tiles-service/v1/arcgis/imagery/standard/static/tile/{z}/{y}/{x}?token=' + encodeURIComponent(apiKey),
       {
         minZoom: 0,
@@ -24,6 +24,12 @@
         attribution: 'Imagery: Esri, Vantor, Earthstar Geographics, and the GIS User Community'
       }
     );
+    layer.on('tileerror', () => {
+      updateSatelliteStatus(false, 'CHECK API KEY');
+      baseMapStatus.textContent = 'ESRI TILE ERROR · CHECK KEY / QUOTA';
+    });
+    layer.on('tileload', () => updateSatelliteStatus(true, 'CONNECTED'));
+    return layer;
   }
 
   function updateSatelliteStatus(ready, label) {
@@ -104,14 +110,6 @@
     providerKeyInput.value = '';
     providerKeyMessage.textContent = 'Ключ удалён с этого устройства.';
   });
-  if (satelliteLayer) {
-    satelliteLayer.on('tileerror', () => {
-      updateSatelliteStatus(false, 'CHECK API KEY');
-      baseMapStatus.textContent = 'ESRI TILE ERROR · CHECK KEY / QUOTA';
-    });
-    satelliteLayer.on('tileload', () => updateSatelliteStatus(true, 'CONNECTED'));
-  }
-
   const marker = L.circleMarker(center, {
     radius: 6, color: '#b8fff0', weight: 2, fillColor: '#42c7b7', fillOpacity: 1
   }).addTo(map);
