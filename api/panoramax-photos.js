@@ -89,7 +89,7 @@ module.exports = async function panoramaxPhotosHandler(req, res) {
     }
     const locations = Array.from(groups.values()).map(group => ({
       lat:group.lat, lon:group.lon, count:group.count,
-      items:group.items.sort((a,b)=>String(b.capturedAt||"").localeCompare(String(a.capturedAt||""))).slice(0,20)
+      items:group.items.sort((a,b)=>String(b.capturedAt||"").localeCompare(String(a.capturedAt||"")))
     })).sort((a,b)=>b.count-a.count);
     const topAuthor = Array.from(authorCounts.entries()).sort((a,b)=>b[1]-a[1])[0] || null;
     captureTimes.sort();

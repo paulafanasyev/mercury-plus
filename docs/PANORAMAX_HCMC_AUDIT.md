@@ -51,7 +51,7 @@ Mercury Plus consequently returns metadata and official viewer links only. It do
 - Fixed bbox: `106.60,10.65,106.90,10.98`; fixed cap 100.
 - Only public, ready, point-geometry items with CC BY-SA 4.0 are accepted.
 - Points are grouped by four-decimal coordinate buckets.
-- Popup shows author, capture time, per-item licence and the exact original viewer link.
+- Popup shows every item in the coordinate group, with author, capture time, per-item licence and the exact original viewer link. Popups are scrollable for dense clusters.
 - Shared cache: 30 minutes with stale-while-revalidate.
 - User-triggered request only; no background polling.
 - No image assets are sent to the client.

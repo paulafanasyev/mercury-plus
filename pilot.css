@@ -136,7 +136,7 @@
 .panoramax-action[hidden]{display:none}
 .panoramax-disclaimer{margin:8px 0;color:#8b9da4;font-size:8px;line-height:1.55}
 .panoramax-attribution{display:inline-block;color:#a8e1df;font:8px 'DM Mono',monospace;text-decoration:underline;text-underline-offset:2px}
-.panoramax-popup{min-width:180px;max-width:245px;color:#18323d}
+.panoramax-popup{min-width:180px;max-width:245px;max-height:260px;overflow-y:auto;color:#18323d}
 .panoramax-popup strong{font:12px 'DM Mono',monospace;color:#276d73}
 .panoramax-popup p{margin:5px 0 8px;font-size:10px;line-height:1.4}
 .panoramax-popup-item{padding:6px 0;border-top:1px solid #d7e1e4}

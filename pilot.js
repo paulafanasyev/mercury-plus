@@ -609,7 +609,7 @@
     const note = document.createElement('p');
     note.textContent = 'Фото общественного пространства · не видеопоток';
     root.appendChild(note);
-    (location.items || []).slice(0, 8).forEach(item => {
+    (location.items || []).forEach(item => {
       const row = document.createElement('div');
       row.className = 'panoramax-popup-item';
       const meta = document.createElement('small');
@@ -624,11 +624,6 @@
       row.appendChild(link);
       root.appendChild(row);
     });
-    if (location.count > 8) {
-      const more = document.createElement('small');
-      more.textContent = 'Ещё ' + (location.count - 8) + ' снимков доступны в официальном просмотрщике.';
-      root.appendChild(more);
-    }
     const coordinates = document.createElement('small');
     coordinates.className = 'panoramax-popup-coords';
     coordinates.textContent = Number(location.lat).toFixed(5) + ', ' + Number(location.lon).toFixed(5);
@@ -646,7 +641,7 @@
         radius: Math.min(10, 5 + Math.log2(count + 1)),
         color: '#163c4b', weight: 1.5, fillColor: '#7fc6c2', fillOpacity: 0.88
       });
-      marker.bindPopup(createPanoramaxPopup(location), { maxWidth: 270 });
+      marker.bindPopup(createPanoramaxPopup(location), { maxWidth: 270, maxHeight: 300 });
       panoramaxLayer.addLayer(marker);
     });
   }
