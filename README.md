@@ -10,7 +10,7 @@ Mercury Plus is an experimental browser map workspace for Ho Chi Minh City. It p
 - Optional Esri World Imagery satellite/aerial layer using a visitor-provided ArcGIS API key.
 - Per-browser API-key settings: the key is stored in localStorage on the visitor's device and can be replaced or deleted.
 - Responsive layer catalogue and explicit pending/offline states.
-- No connected transport, weather, flood, CCTV or infrastructure feeds yet.
+- No connected transport, weather, flood or infrastructure feeds yet. The camera catalogue is not embedded; the sidebar links to the official HCMC traffic-camera portal while third-party display/reuse permission is unresolved.
 - Place search is intentionally disabled until an appropriate geocoding provider and usage controls are selected.
 
 ## Run locally
@@ -31,3 +31,5 @@ This repository includes a static `vercel.json` configuration. A deployment is n
 - [Upstream rights audit](docs/UPSTREAM_AUDIT.md)
 - [HCMC data catalogue](docs/HCMC_DATA_CATALOG.md)
 - [Port plan and verification gates](MERCURY_PLUS_PORT_PLAN.md)
+- [HCMC camera source and permission audit](docs/CAMERA_SOURCE_AUDIT.md)
+- [Bilingual camera permission request](docs/CAMERA_PERMISSION_REQUEST.md)
