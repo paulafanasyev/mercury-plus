@@ -11,6 +11,7 @@ Mercury Plus is an experimental browser map workspace for Ho Chi Minh City. It p
 - Per-browser API-key settings: the key is stored in localStorage on the visitor's device and can be replaced or deleted.
 - Responsive layer catalogue and explicit pending/offline states.
 - No connected transport, weather, flood or infrastructure feeds yet. The camera catalogue is not embedded; the sidebar links to the official HCMC traffic-camera portal while third-party display/reuse permission is unresolved.
+- User-triggered driving directions between two map points via a bounded same-origin API endpoint and the OSRM demo server; one route request per action, with OSRM/OSM attribution and no live-traffic claim.
 - Place search is intentionally disabled until an appropriate geocoding provider and usage controls are selected.
 
 ## Run locally
