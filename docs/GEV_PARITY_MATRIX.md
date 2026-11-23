@@ -7,9 +7,9 @@
 
 ## Executive status
 
-Mercury Plus is currently a small static Leaflet application, not a port of God's Eye View. The production page has a working HCMC-centred OSM map and a new Public Cameras section linking to the official city traffic portal. No camera images/video are embedded yet; the third-party embedding permission is not verified. No upstream GEV application modules have been imported.
+Mercury Plus is still a small static Leaflet application, not a port of God's Eye View. Production now has an HCMC-centred OSM map, a Public Cameras section linking to the official city portal, and a user-triggered driving-route planner. Camera snapshots/video remain disabled because third-party embedding permission is not verified. No upstream GEV application modules have been imported.
 
-**Production verification:** Vercel deployment `dpl_2ixLoMQaoR6pZD43CzDVVRCuGSVN`, commit `8bba250476b2fae8f445019597d1cc8aeb3dcfa0`, state **READY**. Public URL returned HTTP 200. The live HTML contains the Public Cameras section and official portal link.
+**Production verification:** Vercel deployment `dpl_4QG17oNFZEoP2bWxiCiJEULgFuSQ`, commit `81b628ac59536cc04eda2c8ce2b79d25f8f74116`, state **READY**. Public page returned HTTP 200 and the live HTML contains the route planner controls and Public Cameras section. The same-origin route API returned HTTP 200 for a central-HCMC test route and HTTP 400 for malformed coordinates. The browser click-to-route interaction has not yet been manually tested on a physical device.
 
 Status vocabulary:
 - **VERIFIED** — current implementation or source fact has been inspected.
@@ -35,7 +35,7 @@ Status vocabulary:
 | Live transit vehicles | **NOT IMPLEMENTED** | HCMC buses and metro would be useful, but an official real-time vehicle-position feed has not been verified | Find operator/authority GTFS and GTFS-Realtime sources, terms, API access, freshness, attribution and geographic coverage. Do not draw vehicles from timetables as if live | High |
 | Live rail / metro | **NOT IMPLEMENTED** | Metro Line 1 and future rail context are relevant | Need operator-published live positions or a documented feed; static schedules alone are not live tracking | Medium |
 | Road traffic conditions / congestion | **NOT IMPLEMENTED** | High relevance | Official traffic-speed/incident feed or licensed provider (for example TomTom); a camera image is not a measured traffic-speed feed. Provider key, billing and storage rules may apply | High |
-| Directions / routing | **PARTIAL** — user-triggered driving routes between two map points; OSRM route response verified for central HCMC | Useful within HCMC | A same-origin Vercel endpoint makes a fixed OSRM request with an identifying User-Agent and app Referer, validates coordinates, and limits request frequency. Demo server is best-effort, non-commercial and capped at 1 request/second; self-host for production scale. OSM/OSRM attribution is shown | High |
+| Directions / routing | **PARTIAL — PRODUCTION API VERIFIED** — two-point driving route UI is deployed; same-origin API returned HTTP 200 with geometry and turn steps (1.31 km test route). Malformed coordinates returned HTTP 400. Manual map-click interaction test remains pending | Useful within HCMC | Fixed OSRM upstream, coordinate validation, timeout, no-store response, app User-Agent/Referer and a per-client in-memory 1 req/s guard per warm Vercel function instance. This is **not a global rate limit** across serverless instances. OSRM demo is best-effort with no SLA; use a shared global limiter or self-host OSRM before public scale. OSM/OSRM attribution is shown | High |
 | OSM Places / place search | **NOT IMPLEMENTED** — search currently reports not connected | Useful for hospitals, transit stops, public facilities and local places | GEV uses a dedicated Overpass upstream. Need rate limits, user-triggered search, caching policy, language/alias handling and attribution; do not scrape commercial map products | High |
 | Administrative boundaries | **NOT IMPLEMENTED** as a separate overlay | Important after HCMC's post-2025 boundary changes | Select an authoritative current boundary dataset; confirm version, exact geographic extent, licence and update time. OSM fallback under ODbL | High |
 | Roads, waterways, bridges and public facilities | **PARTIAL** — visible only as part of OSM base tiles, no selectable data overlays | Very relevant | Prefer individual HCMC Open Data/HCMGIS records. Every selected record needs its own licence, distribution/API, freshness and attribution review | High |
@@ -99,8 +99,12 @@ Status vocabulary:
 ## Verification boundary
 
 - GitHub repository visibility: **PUBLIC — VERIFIED**.
-- Main commit: `8bba250476b2fae8f445019597d1cc8aeb3dcfa0`.
-- Production deployment: **READY — VERIFIED**; HTTP 200; live HTML contains the camera section and official portal link.
+- Main commit: `81b628ac59536cc04eda2c8ce2b79d25f8f74116`.
+- Production deployment: **READY — VERIFIED**; HTTP 200; live HTML contains route controls and the camera section.
+- Production route API: **VERIFIED** for one central-HCMC test (HTTP 200; 1,312.6 m; 129.5 s estimated; 7 manoeuvre steps) and malformed input (HTTP 400).
+- Route panel elements are present in production HTML; a manual browser/device click-through remains **NOT PROVEN**.
+- Driving route times are OSRM estimates from road-network data, **not live traffic**.
+- Rate limiting is per client and per warm serverless instance, not a global cross-instance guarantee; do not treat the public demo integration as ready for mass traffic.
 - Official camera portal link in Mercury Plus: **VERIFIED**.
 - HCMC image/HLS embedding permission: **NOT VERIFIED**.
 - Live camera media inside Mercury Plus: **NOT IMPLEMENTED**.
