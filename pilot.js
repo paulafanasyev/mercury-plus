@@ -285,6 +285,142 @@
     }
   });
 
+  // On-demand HCMC model weather. No key, no polling, no stored responses.
+  const weatherLayerStatus = document.getElementById('weatherLayerStatus');
+  const loadWeatherButton = document.getElementById('loadWeatherButton');
+  const refreshWeatherButton = document.getElementById('refreshWeatherButton');
+  const weatherCard = document.getElementById('weatherCard');
+  const weatherMessage = document.getElementById('weatherMessage');
+  const weatherUrl = 'https://api.open-meteo.com/v1/forecast?latitude=10.7769&longitude=106.7009' +
+    '&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m' +
+    '&timezone=Asia%2FHo_Chi_Minh';
+  let weatherRequest = null;
+  let lastWeatherRequestAt = 0;
+  let weatherHasData = false;
+
+  function weatherCodeLabel(code, isDay) {
+    const labels = {
+      0: isDay ? 'Ясно' : 'Ясная ночь',
+      1: 'Преимущественно ясно',
+      2: 'Переменная облачность',
+      3: 'Пасмурно',
+      45: 'Туман',
+      48: 'Туман / изморозь',
+      51: 'Слабая морось',
+      53: 'Морось',
+      55: 'Сильная морось',
+      56: 'Переохлаждённая морось',
+      57: 'Сильная переохлаждённая морось',
+      61: 'Небольшой дождь',
+      63: 'Дождь',
+      65: 'Сильный дождь',
+      66: 'Ледяной дождь',
+      67: 'Сильный ледяной дождь',
+      71: 'Небольшой снег',
+      73: 'Снег',
+      75: 'Сильный снег',
+      77: 'Снежная крупа',
+      80: 'Небольшой ливень',
+      81: 'Ливень',
+      82: 'Сильный ливень',
+      85: 'Снежный заряд',
+      86: 'Сильный снежный заряд',
+      95: 'Гроза',
+      96: 'Гроза с градом',
+      99: 'Сильная гроза с градом'
+    };
+    return labels[code] || 'Код погоды: ' + code;
+  }
+
+  function weatherNumber(value, digits = 1) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toFixed(digits) : '—';
+  }
+
+  function weatherDirection(degrees) {
+    const points = ['С', 'СВ', 'В', 'ЮВ', 'Ю', 'ЮЗ', 'З', 'СЗ'];
+    const number = Number(degrees);
+    if (!Number.isFinite(number)) return '—';
+    return points[Math.round(number / 45) % 8];
+  }
+
+  async function loadHcmcWeather() {
+    if (weatherRequest) return weatherRequest;
+    const now = Date.now();
+    if (lastWeatherRequestAt && now - lastWeatherRequestAt < 60000) {
+      weatherMessage.textContent = 'Обновление доступно не чаще одного раза в минуту.';
+      weatherCard.hidden = false;
+      return;
+    }
+    lastWeatherRequestAt = now;
+    weatherLayerStatus.textContent = 'LOADING';
+    weatherLayerStatus.classList.remove('status-live', 'status-off');
+    weatherLayerStatus.classList.add('status-pending');
+    weatherMessage.textContent = 'Запрашиваю модельные данные…';
+    loadWeatherButton.disabled = true;
+    refreshWeatherButton.disabled = true;
+    loadWeatherButton.textContent = 'ЗАГРУЗКА…';
+
+    weatherRequest = (async () => {
+      try {
+        const response = await fetch(weatherUrl, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store',
+          signal: AbortSignal.timeout(12000)
+        });
+        if (!response.ok) throw new Error('Погодный сервис ответил HTTP ' + response.status + '.');
+        const payload = await response.json();
+        const current = payload && payload.current;
+        if (!current || !Number.isFinite(Number(current.temperature_2m)) ||
+            !Number.isFinite(Number(current.weather_code))) {
+          throw new Error('В ответе нет корректных текущих модельных условий.');
+        }
+
+        document.getElementById('weatherTemperature').textContent = weatherNumber(current.temperature_2m) + '°C';
+        document.getElementById('weatherDescription').textContent =
+          weatherCodeLabel(Number(current.weather_code), Number(current.is_day) === 1);
+        document.getElementById('weatherModelTime').textContent =
+          'Время модели: ' + String(current.time || 'не указано').replace('T', ' ') + ' · Вьетнам';
+        document.getElementById('weatherFeelsLike').textContent = weatherNumber(current.apparent_temperature) + '°C';
+        document.getElementById('weatherHumidity').textContent = weatherNumber(current.relative_humidity_2m, 0) + '%';
+        document.getElementById('weatherPrecipitation').textContent = weatherNumber(current.precipitation, 1) + ' мм';
+        document.getElementById('weatherWind').textContent = weatherNumber(current.wind_speed_10m) + ' км/ч';
+        document.getElementById('weatherGusts').textContent = weatherNumber(current.wind_gusts_10m) + ' км/ч';
+        document.getElementById('weatherWindDirection').textContent =
+          weatherDirection(current.wind_direction_10m) + ' · ' + weatherNumber(current.wind_direction_10m, 0) + '°';
+        const gridPoint = 'Модельная ячейка: ' + weatherNumber(payload.latitude, 4) + '°, ' +
+          weatherNumber(payload.longitude, 4) + '° · шаг ' + weatherNumber(current.interval / 60, 0) + ' мин';
+        document.getElementById('weatherGridPoint').textContent = gridPoint;
+
+        weatherHasData = true;
+        weatherCard.hidden = false;
+        weatherMessage.textContent = '';
+        weatherLayerStatus.textContent = 'MODEL DATA';
+        weatherLayerStatus.classList.remove('status-pending', 'status-off');
+        weatherLayerStatus.classList.add('status-live');
+        loadWeatherButton.textContent = 'ОБНОВИТЬ ПОГОДУ';
+      } catch (error) {
+        weatherLayerStatus.textContent = weatherHasData ? 'STALE' : 'UNAVAILABLE';
+        weatherLayerStatus.classList.remove('status-live', 'status-pending');
+        weatherLayerStatus.classList.add('status-off');
+        weatherMessage.textContent = error && error.message
+          ? error.message
+          : 'Не удалось получить погоду. Повторите позже.';
+        weatherCard.hidden = false;
+      } finally {
+        loadWeatherButton.disabled = false;
+        refreshWeatherButton.disabled = false;
+        loadWeatherButton.textContent = weatherHasData ? 'ОБНОВИТЬ ПОГОДУ' : 'ПОВТОРИТЬ ЗАПРОС';
+        weatherRequest = null;
+      }
+    })();
+    return weatherRequest;
+  }
+
+  loadWeatherButton.addEventListener('click', loadHcmcWeather);
+  refreshWeatherButton.addEventListener('click', loadHcmcWeather);
+
   const dialog = document.getElementById('aboutDialog');
   document.getElementById('aboutButton').addEventListener('click', () => dialog.showModal());
   document.getElementById('closeAbout').addEventListener('click', () => dialog.close());

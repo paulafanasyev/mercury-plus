@@ -75,3 +75,27 @@
   .route-steps{max-height:170px}
   .route-toggle span{display:inline!important;font-size:8px}
 }
+
+
+/* On-demand model weather card */
+.weather-load-button,.weather-refresh-button{display:block;width:calc(100% - 21px);margin:4px 0 8px 21px;min-height:34px;padding:8px 10px;text-align:left;border:1px solid #31515c;background:#102a36;color:#9de7dc;font:9px 'DM Mono',monospace;letter-spacing:.5px;cursor:pointer}
+.weather-load-button:hover,.weather-refresh-button:hover{background:#173b45;border-color:#4b8d8a}
+.weather-load-button:disabled,.weather-refresh-button:disabled{opacity:.55;cursor:wait}
+.weather-card{margin:5px 0 9px 21px;padding:11px 10px;background:#091923;border:1px solid #294453}
+.weather-card[hidden]{display:none}
+.weather-main{display:flex;justify-content:space-between;align-items:flex-start;gap:9px;padding-bottom:9px;border-bottom:1px solid #203a49}
+.weather-main strong{display:block;font:24px 'DM Mono',monospace;color:#b1f1e5;letter-spacing:-1px}
+.weather-main span{display:block;margin-top:3px;font-size:10px;color:#d4e4e9}
+.weather-main small{max-width:118px;text-align:right;color:#819aa6;font:8px/1.5 'DM Mono',monospace}
+.weather-metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px 12px;padding:10px 0}
+.weather-metrics div span{display:block;font-size:8px;color:#8098a4}
+.weather-metrics div b{display:block;margin-top:3px;font:10px 'DM Mono',monospace;color:#dce9ed}
+.weather-grid-point{display:block;color:#77919d;font:8px/1.5 'DM Mono',monospace}
+.weather-message{margin:6px 0;color:#e3b66d;font-size:9px;line-height:1.5}
+.weather-disclaimer{margin:8px 0;color:#8298a5;font-size:8px;line-height:1.55}
+.weather-attribution{display:inline-block;color:#9de7dc;font:8px 'DM Mono',monospace;text-decoration:underline;text-underline-offset:2px}
+.weather-refresh-button{margin:9px 0 0;width:100%;font-size:8px}
+@media(max-width:760px){
+  .weather-card{margin-bottom:8px}
+  .weather-main strong{font-size:22px}
+}

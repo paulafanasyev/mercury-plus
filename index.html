@@ -50,9 +50,29 @@
           <p class="layer-note">Camera images and streams are not embedded here until the operator's reuse and framing terms are confirmed. The official portal remains available directly.</p>
         </div>
         <div class="layer-group">
-          <div class="group-title"><span class="group-icon">⌁</span> LIVE CONDITIONS</div>
+          <div class="group-title"><span class="group-icon">⌁</span> CITY CONDITIONS</div>
           <label class="layer-row"><span><b>Public transport</b><small>Feed not connected</small></span><span class="status status-off">OFFLINE</span></label>
-          <label class="layer-row"><span><b>Weather & rainfall</b><small>Provider not connected</small></span><span class="status status-off">OFFLINE</span></label>
+          <div class="layer-row"><span><b>Погода и осадки</b><small>Модельные условия · Open-Meteo</small></span><span id="weatherLayerStatus" class="status status-pending">NOT LOADED</span></div>
+          <button id="loadWeatherButton" class="weather-load-button" type="button">ЗАГРУЗИТЬ ПОГОДУ</button>
+          <section id="weatherCard" class="weather-card" hidden aria-live="polite" aria-label="Погода в Хошимине">
+            <div class="weather-main">
+              <div><strong id="weatherTemperature">--.-°C</strong><span id="weatherDescription">Ожидание данных</span></div>
+              <small id="weatherModelTime">Модельное время не загружено</small>
+            </div>
+            <div class="weather-metrics">
+              <div><span>Ощущается</span><b id="weatherFeelsLike">—</b></div>
+              <div><span>Влажность</span><b id="weatherHumidity">—</b></div>
+              <div><span>Осадки / 15 мин</span><b id="weatherPrecipitation">—</b></div>
+              <div><span>Ветер</span><b id="weatherWind">—</b></div>
+              <div><span>Порывы</span><b id="weatherGusts">—</b></div>
+              <div><span>Направление</span><b id="weatherWindDirection">—</b></div>
+            </div>
+            <small id="weatherGridPoint" class="weather-grid-point"></small>
+            <p id="weatherMessage" class="weather-message" aria-live="polite"></p>
+            <button id="refreshWeatherButton" class="weather-refresh-button" type="button">ОБНОВИТЬ ПОГОДУ</button>
+            <p class="weather-disclaimer">Модельные данные Open-Meteo, а не показания местной метеостанции. Осадки — сумма за 15-минутный интервал. Не является штормовым предупреждением или экстренным оповещением.</p>
+            <a class="weather-attribution" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather data by Open-Meteo.com · CC BY 4.0</a>
+          </section>
           <label class="layer-row"><span><b>Flood context</b><small>Official feed pending</small></span><span class="status status-off">OFFLINE</span></label>
         </div>
         <div class="sidebar-footer"><span class="footer-pulse"></span> PILOT DATA GATE ACTIVE <small>Unverified layers are not displayed.</small></div>

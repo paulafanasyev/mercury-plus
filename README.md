@@ -10,8 +10,9 @@ Mercury Plus is an experimental browser map workspace for Ho Chi Minh City. It p
 - Optional Esri World Imagery satellite/aerial layer using a visitor-provided ArcGIS API key.
 - Per-browser API-key settings: the key is stored in localStorage on the visitor's device and can be replaced or deleted.
 - Responsive layer catalogue and explicit pending/offline states.
-- No connected transport, weather, flood or infrastructure feeds yet. The camera catalogue is not embedded; the sidebar links to the official HCMC traffic-camera portal while third-party display/reuse permission is unresolved.
+- No connected public-transport, flood or infrastructure feeds yet. Current HCMC model weather conditions are available on demand through Open-Meteo; values are model estimates, not station readings or hazard alerts. The camera catalogue is not embedded; official portal terms require prior written permission for reuse.
 - User-triggered driving directions between two map points via a bounded same-origin API endpoint and the OSRM demo server; one route request per action, with OSRM/OSM attribution and no live-traffic claim.
+- On-demand HCMC weather conditions from Open-Meteo with visible timestamp and attribution; no background polling or API key.
 - Place search is intentionally disabled until an appropriate geocoding provider and usage controls are selected.
 
 ## Run locally
@@ -25,6 +26,7 @@ This repository includes a static `vercel.json` configuration. A deployment is n
 - Third-party data and assets have separate terms and are not automatically covered by the upstream MIT licence.
 - Esri Static Basemap Tiles require an API key with `premium:user:staticbasemaptiles`; visitors must configure their own key and restrict it by HTTP referrer in their Esri account. Browser keys are visible to the browser and must not be treated as server secrets. Review Esri pricing, quotas and attribution requirements before use.
 - OpenStreetMap attribution: © OpenStreetMap contributors. OSM data is available under the ODbL; the standard tile service has a separate usage policy.
+- Open-Meteo free API is limited to non-commercial use (less than 10,000 calls/day, 5,000/hour and 600/minute); API data is CC BY 4.0 and requires a nearby attribution link. If the project becomes commercial or needs higher volumes, disable the free endpoint and review the paid terms.
 - The pilot is informational and experimental, not for emergency or safety-critical use.
 
 ## Project documents
@@ -36,3 +38,4 @@ This repository includes a static `vercel.json` configuration. A deployment is n
 - [Bilingual camera permission request](docs/CAMERA_PERMISSION_REQUEST.md)
 - [God's Eye View feature parity matrix](docs/GEV_PARITY_MATRIX.md)
 - [Production routing verification](docs/ROUTING_VERIFICATION.md)
+- [Open-Meteo source and weather-layer audit](docs/WEATHER_SOURCE_AUDIT.md)

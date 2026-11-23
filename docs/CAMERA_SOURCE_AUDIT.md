@@ -12,6 +12,20 @@
 
 The UI links directly to the official city traffic-camera map. It does not copy the third-party camera catalogue, proxy images, cache frames, or embed streams. Public access to a camera image is not, by itself, a licence to re-host, frame, cache, or redistribute it.
 
+## Official HCMC portal Terms of Use — decisive restriction
+
+The official [Terms of Use](https://giaothong.hochiminhcity.gov.vn/TermOfUse/) were checked on 2026-11-23. The Intellectual Property section says the portal content (including images) may be viewed, downloaded and printed only for personal, non-commercial purposes, without copying, publishing, reusing or editing. It then explicitly prohibits copying, modification or reuse without the portal's prior written permission.
+
+**Practical consequence for Mercury Plus:** public availability and non-commercial intent do not grant a third-party website permission to embed, frame, hotlink, proxy, cache, copy or redistribute camera imagery/HLS. Do not enable any of those paths unless written permission from the authorized rights holder expressly covers the intended mode of display. A link that sends the visitor to the official portal is retained instead.
+
+Status:
+- Personal viewing on the official portal: **PERMITTED BY PORTAL TERMS**.
+- Camera imagery reused/embedded in Mercury Plus without written permission: **NOT PERMITTED BY DEFAULT**.
+- Written permission for Mercury Plus: **NOT OBTAINED**.
+- Official portal link from Mercury Plus: **ENABLED**.
+
+Source: [Official HCMC Traffic Information Portal — Terms of Use](https://giaothong.hochiminhcity.gov.vn/TermOfUse/).
+
 ## What God's Eye View actually does
 
 The upstream project's CCTV Mesh is a provider registry, not a universal camera endpoint. Its README describes camera location packs from many individual transport operators. Its `.env.example` has provider-specific switches and limits. Some providers are explicitly disabled unless written permission is held:
@@ -42,8 +56,8 @@ Status:
 - Public portal existence: **VERIFIED**.
 - Portal contains traffic camera imagery: **VERIFIED**.
 - Exact catalogue endpoint as a supported public API: **NOT VERIFIED**.
-- Public website embedding/framing permission for another public app: **NOT VERIFIED**.
-- Permission to proxy/cache/republish images or HLS: **NOT VERIFIED**.
+- Public website embedding/framing permission for another public app without written consent: **NOT PERMITTED BY DEFAULT under the portal Terms of Use**.
+- Permission to proxy/cache/republish images or HLS: **NOT GRANTED; prior written permission required**.
 - Per-camera HLS availability and HTTPS compatibility: **NOT VERIFIED**.
 
 Sources:
