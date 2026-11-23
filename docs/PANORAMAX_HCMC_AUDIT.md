@@ -19,11 +19,11 @@ Endpoint:
 `https://api.panoramax.xyz/api/search?bbox=106.60,10.65,106.90,10.98&limit=100`
 
 Live response on 2026-11-23:
-- HTTP 200; 100 public records; 29 coordinate groups after rounding to four decimal places.
-- All 100 declared **CC BY-SA 4.0**.
-- 98/100 items were attributed to `naoNao89`; two records were attributed to `mapcomplete` / `ravidwivedi`.
-- Instance distribution: 98 from `panoramax.openstreetmap.fr`, 2 from `panoramax.mapcomplete.org`.
-- Capture dates ranged from 2025-07-25 to 2026-03-28.
+- The raw search endpoint returned HTTP 200 and 100 records. After filtering to public (`visibility=anyone`), ready, point geometry and CC BY-SA 4.0, the Mercury Plus production adapter accepted **98 photos** and grouped them into **28 marker locations**.
+- All 98 accepted items declare **CC BY-SA 4.0**.
+- The filtered production response attributes all 98 accepted items to `naoNao89` (100% of the eligible sample); this concentration makes the coverage especially unrepresentative.
+- The earlier raw response contained two additional author records, but they were excluded by the stricter public/ready/licence filter.
+- Capture dates in the current filtered production response range from 2026-01-15 to 2026-03-28.
 - This is sparse, concentrated and contributor-biased coverage, not a representative city-wide Street View network.
 
 Sample item:
