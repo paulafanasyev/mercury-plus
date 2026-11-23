@@ -577,6 +577,156 @@
     if (bounds && bounds.isValid()) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 7 });
   });
 
+  // Sparse Panoramax community-photo locations. Photos remain on their original instances.
+  const panoramaxLayerStatus = document.getElementById('panoramaxLayerStatus');
+  const loadPanoramaxButton = document.getElementById('loadPanoramaxButton');
+  const panoramaxCard = document.getElementById('panoramaxCard');
+  const panoramaxSummary = document.getElementById('panoramaxSummary');
+  const panoramaxUpdated = document.getElementById('panoramaxUpdated');
+  const panoramaxMessage = document.getElementById('panoramaxMessage');
+  const focusPanoramaxButton = document.getElementById('focusPanoramaxButton');
+  const panoramaxLayer = L.featureGroup();
+  let panoramaxLoaded = false;
+  let panoramaxVisible = false;
+  let panoramaxRequest = null;
+
+  function panoramaxCaptureTime(value) {
+    if (!value) return 'Дата съёмки не указана';
+    const date = new Date(value);
+    if (!Number.isFinite(date.getTime())) return 'Дата съёмки не указана';
+    return date.toLocaleString('ru-RU', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh'
+    }) + ' · Вьетнам';
+  }
+
+  function createPanoramaxPopup(location) {
+    const root = document.createElement('div');
+    root.className = 'panoramax-popup';
+    const title = document.createElement('strong');
+    title.textContent = location.count + ' фото в этой точке';
+    root.appendChild(title);
+    const note = document.createElement('p');
+    note.textContent = 'Фото общественного пространства · не видеопоток';
+    root.appendChild(note);
+    (location.items || []).slice(0, 8).forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'panoramax-popup-item';
+      const meta = document.createElement('small');
+      meta.textContent = panoramaxCaptureTime(item.capturedAt) + ' · ' +
+        (item.author || 'Автор не указан') + ' · CC BY-SA 4.0';
+      row.appendChild(meta);
+      const link = document.createElement('a');
+      link.href = item.viewerUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'ОТКРЫТЬ ОРИГИНАЛ В PANORAMAX ↗';
+      row.appendChild(link);
+      root.appendChild(row);
+    });
+    if (location.count > 8) {
+      const more = document.createElement('small');
+      more.textContent = 'Ещё ' + (location.count - 8) + ' снимков доступны в официальном просмотрщике.';
+      root.appendChild(more);
+    }
+    const coordinates = document.createElement('small');
+    coordinates.className = 'panoramax-popup-coords';
+    coordinates.textContent = Number(location.lat).toFixed(5) + ', ' + Number(location.lon).toFixed(5);
+    root.appendChild(coordinates);
+    return root;
+  }
+
+  function renderPanoramaxLocations(locations) {
+    panoramaxLayer.clearLayers();
+    (locations || []).forEach(location => {
+      const lat = Number(location.lat), lon = Number(location.lon), count = Number(location.count);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 ||
+          lon < -180 || lon > 180 || !Number.isFinite(count) || count < 1) return;
+      const marker = L.circleMarker([lat, lon], {
+        radius: Math.min(10, 5 + Math.log2(count + 1)),
+        color: '#163c4b', weight: 1.5, fillColor: '#7fc6c2', fillOpacity: 0.88
+      });
+      marker.bindPopup(createPanoramaxPopup(location), { maxWidth: 270 });
+      panoramaxLayer.addLayer(marker);
+    });
+  }
+
+  async function loadPanoramaxLocations() {
+    if (panoramaxRequest) return panoramaxRequest;
+    if (panoramaxLoaded) {
+      if (panoramaxVisible) {
+        map.removeLayer(panoramaxLayer); panoramaxVisible = false;
+        loadPanoramaxButton.textContent = 'ПОКАЗАТЬ ФОТОТОЧКИ';
+        panoramaxLayerStatus.textContent = 'LOADED';
+      } else {
+        panoramaxLayer.addTo(map); panoramaxVisible = true;
+        loadPanoramaxButton.textContent = 'СКРЫТЬ ФОТОТОЧКИ';
+        panoramaxLayerStatus.textContent = 'VISIBLE';
+      }
+      return;
+    }
+
+    loadPanoramaxButton.disabled = true;
+    loadPanoramaxButton.textContent = 'ЗАГРУЖАЮ…';
+    panoramaxLayerStatus.textContent = 'LOADING';
+    panoramaxLayerStatus.classList.remove('status-live', 'status-off');
+    panoramaxLayerStatus.classList.add('status-pending');
+    panoramaxMessage.textContent = 'Запрашиваю каталог публичных фотографий Panoramax…';
+    panoramaxCard.hidden = false;
+
+    panoramaxRequest = (async () => {
+      try {
+        const response = await fetch('/api/panoramax-photos', {
+          method: 'GET', headers: { 'Accept': 'application/json' },
+          cache: 'no-store', signal: AbortSignal.timeout(15000)
+        });
+        let payload;
+        try { payload = await response.json(); }
+        catch (_) { throw new Error('Panoramax вернул некорректный ответ.'); }
+        if (!response.ok) throw new Error(payload.error || 'Каталог фотографий недоступен (HTTP ' + response.status + ').');
+        if (!Array.isArray(payload.locations)) throw new Error('В ответе нет списка фототочек.');
+        renderPanoramaxLocations(payload.locations);
+        panoramaxLoaded = true;
+        if (panoramaxLayer.getLayers().length) {
+          panoramaxLayer.addTo(map); panoramaxVisible = true;
+          loadPanoramaxButton.textContent = 'СКРЫТЬ ФОТОТОЧКИ';
+          panoramaxLayerStatus.textContent = panoramaxLayer.getLayers().length + ' LOCATIONS';
+          panoramaxLayerStatus.classList.remove('status-pending', 'status-off');
+          panoramaxLayerStatus.classList.add('status-live');
+          focusPanoramaxButton.hidden = false;
+          panoramaxMessage.textContent = 'Нажмите на точку, чтобы увидеть дату и автора и открыть оригинал у Panoramax.';
+        } else {
+          panoramaxLayerStatus.textContent = 'NO PHOTOS';
+          panoramaxLayerStatus.classList.remove('status-pending');
+          panoramaxLayerStatus.classList.add('status-live');
+          loadPanoramaxButton.textContent = 'ПОВТОРИТЬ ЗАПРОС';
+          panoramaxMessage.textContent = 'В выбранной области фотографии не найдены.';
+        }
+        const metadata = payload.metadata || {};
+        panoramaxSummary.textContent = (metadata.photoCount || 0) + ' фото · ' +
+          (metadata.locationCount || panoramaxLayer.getLayers().length) + ' координатных точек';
+        panoramaxUpdated.textContent = 'Каталог проверен: ' +
+          (metadata.checkedAt ? panoramaxCaptureTime(metadata.checkedAt) : 'время не указано');
+      } catch (error) {
+        panoramaxLayerStatus.textContent = 'UNAVAILABLE';
+        panoramaxLayerStatus.classList.remove('status-live', 'status-pending');
+        panoramaxLayerStatus.classList.add('status-off');
+        panoramaxMessage.textContent = error && error.message ? error.message : 'Не удалось загрузить фотокаталог. Повторите запрос позже.';
+        loadPanoramaxButton.textContent = 'ПОВТОРИТЬ ЗАПРОС';
+      } finally {
+        loadPanoramaxButton.disabled = false;
+        panoramaxRequest = null;
+      }
+    })();
+    return panoramaxRequest;
+  }
+
+  loadPanoramaxButton.addEventListener('click', loadPanoramaxLocations);
+  focusPanoramaxButton.addEventListener('click', () => {
+    const bounds = panoramaxLayer.getBounds();
+    if (bounds && bounds.isValid()) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 14 });
+  });
+
   const dialog = document.getElementById('aboutDialog');
   document.getElementById('aboutButton').addEventListener('click', () => dialog.showModal());
   document.getElementById('closeAbout').addEventListener('click', () => dialog.close());

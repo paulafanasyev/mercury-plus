@@ -120,3 +120,27 @@
 .earthquake-popup p{margin:5px 0;font-size:11px;line-height:1.4}
 .earthquake-popup small{display:block;color:#5f727a;font-size:9px;line-height:1.45}
 .earthquake-popup a{display:inline-block;margin-top:7px;color:#276d82;font:9px 'DM Mono',monospace}
+
+
+/* Sparse Panoramax community-photo map markers — source images stay with Panoramax */
+.panoramax-load-button{display:block;width:calc(100% - 21px);margin:4px 0 8px 21px;min-height:34px;padding:8px 10px;text-align:left;border:1px solid #315a62;background:#122d35;color:#a8e1df;font:9px 'DM Mono',monospace;letter-spacing:.5px;cursor:pointer}
+.panoramax-load-button:hover,.panoramax-action:hover{background:#1b4149;border-color:#69a9a9}
+.panoramax-load-button:disabled{opacity:.55;cursor:wait}
+.panoramax-card{margin:5px 0 9px 21px;padding:11px 10px;background:#0c1d26;border:1px solid #31505a}
+.panoramax-card[hidden]{display:none}
+.panoramax-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding-bottom:8px;border-bottom:1px solid #263d47}
+.panoramax-card-head strong{font:11px 'DM Mono',monospace;color:#a8e1df}
+.panoramax-card-head small{max-width:125px;text-align:right;color:#829ba6;font:8px/1.45 'DM Mono',monospace}
+.panoramax-message{margin:8px 0;color:#c4d5d9;font-size:9px;line-height:1.5}
+.panoramax-action{width:100%;min-height:32px;padding:7px 8px;border:1px solid #315a62;background:#122d35;color:#a8e1df;font:8px 'DM Mono',monospace;letter-spacing:.4px;cursor:pointer}
+.panoramax-action[hidden]{display:none}
+.panoramax-disclaimer{margin:8px 0;color:#8b9da4;font-size:8px;line-height:1.55}
+.panoramax-attribution{display:inline-block;color:#a8e1df;font:8px 'DM Mono',monospace;text-decoration:underline;text-underline-offset:2px}
+.panoramax-popup{min-width:180px;max-width:245px;color:#18323d}
+.panoramax-popup strong{font:12px 'DM Mono',monospace;color:#276d73}
+.panoramax-popup p{margin:5px 0 8px;font-size:10px;line-height:1.4}
+.panoramax-popup-item{padding:6px 0;border-top:1px solid #d7e1e4}
+.panoramax-popup-item small{display:block;color:#536a73;font-size:9px;line-height:1.4}
+.panoramax-popup-item a{display:inline-block;margin-top:4px;color:#216a79;font:8px 'DM Mono',monospace}
+.panoramax-popup-coords{display:block;margin-top:7px;color:#71858c;font:8px 'DM Mono',monospace}
+@media(max-width:760px){.panoramax-popup{max-width:220px}}

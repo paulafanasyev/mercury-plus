@@ -7,7 +7,7 @@
 
 ## Executive status
 
-Mercury Plus is still a small Leaflet application, not a port of God's Eye View. Production has an HCMC-centred OSM map, an official camera-portal link (images/video gated by prior written permission), user-triggered driving routes, on-demand Open-Meteo model weather and a user-triggered USGS regional earthquake layer. The MultiGo bus app and historical-flood dataset are linked as discovered sources, but neither has a live/map integration yet. No upstream GEV application modules have been imported.
+Mercury Plus is still a small Leaflet application, not a port of God's Eye View. Production has an HCMC-centred OSM map, an official camera-portal link (images/video gated by prior written permission), user-triggered driving routes, on-demand Open-Meteo model weather, a USGS regional earthquake layer and sparse metadata-only Panoramax community-photo markers. The MultiGo bus app and historical-flood dataset are linked as discovered sources, but neither has a live/map integration yet. No upstream GEV application modules have been imported.
 
 **Production verification:** Vercel deployment `dpl_4XjrE2jByuMWxm5iQ3m3fCM28wbL`, commit `df18c53d603ff7122f8da5f2a8af688f8e7076e8`, state **READY**. Public page returned HTTP 200; production HTML contains the camera portal, route panel, on-demand weather panel, MultiGo and historical-flood source links, and the regional earthquake controls. Production `/api/route` returned HTTP 200 for a central-HCMC test route; `/api/earthquakes` returned HTTP 200 with 10 USGS GeoJSON features. The UI/API are verified separately; full manual browser interaction on a physical device is still pending.
 
@@ -27,7 +27,7 @@ Status vocabulary:
 | Cesium 3D globe / terrain / 3D buildings | **NOT IMPLEMENTED** | Relevant as a map presentation mode | CesiumJS integration; ion token / Google photorealistic tiles have separate current terms, quotas and non-commercial eligibility; do not imply all HCMC is covered | High |
 | CCTV Mesh / traffic cameras | **PARTIAL** — official portal link is live; in-app cameras are disabled | Official portal: https://giaothong.hochiminhcity.gov.vn/Map.aspx. Its Terms of Use permit personal viewing only and prohibit copying, publishing or reuse without prior written permission | Explicit written permission is required before third-party display/embedding. It must define metadata reuse, JPEG/HLS, cadence, caching, attribution, allowed domain and takedown. No proxy, bulk polling, media storage or redistribution before approval | **Critical** |
 | Camera map metadata (IDs, names, coordinates) | **NOT IMPLEMENTED** — no catalogue imported | Community catalogue: https://github.com/MeoPaoo/camera-giao-thong-data | Its code licence does not grant rights to official camera media or automatically clear a synchronized catalogue. Confirm data provenance and operator permission before reuse | Critical |
-| Street Level photos / panoramas | **NOT IMPLEMENTED** | Potential HCMC coverage via Mapillary, KartaView, Panoramax and Google Street View must be queried and measured | Mapillary client token; Google Maps key and billing; KartaView/Panoramax are public APIs but per-image licence/attribution and caching rules apply. Verify city coverage before enabling | Medium |
+| Street Level photos / panoramas | **PARTIAL — METADATA-ONLY PANORAMAX MARKERS** — 100 public items, 29 coordinate groups in the tested HCMC bbox; marker popups link to the original viewer | Panoramax STAC API; sample licence CC BY-SA 4.0, 98/100 records by one contributor, captures 2025-07-25 to 2026-03-28. Content includes roads, buildings, parks and indoor shots, not all traffic views. KartaView/Mapillary/Google coverage not established | No images are fetched or re-hosted. Show capture time, author, per-item CC BY-SA and original viewer link. Panoramax blur configuration is optional and not exposed by public instance config, so embedding media stays disabled. This is sparse community imagery, not CCTV or continuous Street View | Medium |
 | Mapped ALPR camera locations | **EXCLUDE** from the public pilot by default | Not needed to provide traffic context | Even location-only ALPR overlays can facilitate surveillance. No number-plate data, recognition, person identification or tracking is to be implemented | Exclude |
 | Aircraft / ADS-B | **NOT IMPLEMENTED** | Tan Son Nhat and regional airspace context could be relevant | OpenSky has non-commercial research/education conditions and rate limits; adsb.lol is an alternate feed. Verify exact terms, HCMC coverage and freshness; keep provider credentials server-side if required | Medium |
 | Vessels / AIS | **NOT IMPLEMENTED** | Potentially relevant to Saigon River and port approaches | AISStream registration/API key and provider conditions; verify local coverage, update cadence and redistribution/display rights | Medium |
@@ -89,6 +89,15 @@ The upstream `main` branch was re-read on 2026-11-23. It contains 5,272 tracked 
 - Upstream has 5,272 tracked tree entries, including approximately 4,301 under `src/`, 181 under `server/` and 194 scripts. A true source port is a separate migration project, not a small patch.
 - Upstream has provider-specific server adapters for CCTV, traffic, transit, rail, flights, vessels, space, maps, weather, OpenAI, radio, Overpass and other sources. Copying a provider adapter does not confer rights to its data.
 - Upstream's MIT code licence does not override data-provider terms. Only selected local packs may be carried after the file-level audit.
+
+## Panoramax Street Level decision and implementation
+
+- Live Panoramax search returned 100 public records in the tested HCMC bbox and 29 distinct coordinate groups. The inventory is concentrated: 98/100 records have the same contributor. It is a sparse sample, not a complete street-photo network.
+- All 100 sample items declared **CC BY-SA 4.0**. The map returns metadata and an official viewer URL only; it does not embed or host the photos.
+- Spot-checked photos include outdoor roads/vehicles, buildings, parks and indoor or unrelated subjects. Every point is labelled community imagery, not CCTV or live traffic.
+- Panoramax documentation says privacy blurring is optional and depends on a blur-service configuration. The public instance config does not reveal whether that service is enabled, so embedding photos into Mercury Plus remains disabled.
+- The metadata-only layer uses one marker per four-decimal coordinate group, displays contributor/capture time and links each item to its original Panoramax viewer.
+- Audit: `docs/PANORAMAX_HCMC_AUDIT.md`.
 
 ## Camera decision and next actions
 
