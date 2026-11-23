@@ -51,7 +51,9 @@
         </div>
         <div class="layer-group">
           <div class="group-title"><span class="group-icon">⌁</span> CITY CONDITIONS</div>
-          <label class="layer-row"><span><b>Public transport</b><small>Feed not connected</small></span><span class="status status-off">OFFLINE</span></label>
+          <div class="layer-row"><span><b>Общественный транспорт</b><small>MultiGo · доступ к данным не согласован</small></span><span class="status status-pending">ACCESS PENDING</span></div>
+          <a class="source-link" href="https://multigo.golabs.vn/en/" target="_blank" rel="noopener noreferrer">OPEN OFFICIAL MULTIGO ↗</a>
+          <p class="layer-note">В приложении MultiGo доступны автобусные маршруты и расчёт прибытия по GPS. Публичный API для сторонних карт не опубликован; интеграция Mercury Plus ожидает разрешения оператора.</p>
           <div class="layer-row"><span><b>Погода и осадки</b><small>Модельные условия · Open-Meteo</small></span><span id="weatherLayerStatus" class="status status-pending">NOT LOADED</span></div>
           <button id="loadWeatherButton" class="weather-load-button" type="button">ЗАГРУЗИТЬ ПОГОДУ</button>
           <section id="weatherCard" class="weather-card" hidden aria-live="polite" aria-label="Погода в Хошимине">
@@ -73,7 +75,9 @@
             <p class="weather-disclaimer">Модельные данные Open-Meteo, а не показания местной метеостанции. Осадки — сумма за 15-минутный интервал. Не является штормовым предупреждением или экстренным оповещением.</p>
             <a class="weather-attribution" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather data by Open-Meteo.com · CC BY 4.0</a>
           </section>
-          <label class="layer-row"><span><b>Flood context</b><small>Official feed pending</small></span><span class="status status-off">OFFLINE</span></label>
+          <div class="layer-row"><span><b>Исторические подтопления</b><small>425 геопривязанных событий · 2002–2026</small></span><span class="status status-pending">ARCHIVE FOUND</span></div>
+          <a class="source-link" href="https://doi.org/10.23708/8Y16HU" target="_blank" rel="noopener noreferrer">OPEN FLOOD RESEARCH DATA ↗</a>
+          <p class="layer-note">Архив CC BY-NC 4.0 найден; геометрия GeoPackage ещё не преобразована в слой карты. Это исторические случаи, не текущие датчики, предупреждения или прогноз.</p>
         </div>
         <div class="sidebar-footer"><span class="footer-pulse"></span> PILOT DATA GATE ACTIVE <small>Unverified layers are not displayed.</small></div>
       </aside>
