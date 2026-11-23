@@ -79,6 +79,19 @@ Sources:
 - [TrafficCam HCM — source and rights notice](https://camera-hcm.eplus.dev/legal/about)
 - [TrafficCam HCM — terms of use](https://camera-hcm.eplus.dev/legal/terms)
 
+## Official contact for permission request
+
+The official website of the **Trung tâm Quản lý điều hành giao thông đô thị** (Urban Traffic Management and Operations Center) describes its role in operating the city's traffic monitoring and control systems and publishes these public contact details:
+
+- Email: `ttqltt.sgtvt@tphcm.gov.vn`
+- Telephone: `+84 8 3914 3560`
+- Address: `02 Mai Chí Thọ, Phường Thủ Thiêm, TP. Hồ Chí Minh, Vietnam`
+- Official center page: [dieuhanhgiaothong-sxd.hochiminhcity.gov.vn](https://dieuhanhgiaothong-sxd.hochiminhcity.gov.vn/)
+
+This is the best verified initial contact found for routing the request. It is **not yet verified** that this office is the sole rights holder or the authorized issuer of third-party camera-embedding permissions. Ask the Center to identify the data owner/authorized approver if the request belongs to another department.
+
+A ready-to-send bilingual request is in [CAMERA_PERMISSION_REQUEST.md](CAMERA_PERMISSION_REQUEST.md).
+
 ## Technical design after permission is secured
 
 1. Obtain written confirmation from the portal/operator that Mercury Plus may display the camera catalogue and embed individual still frames and/or HLS streams in a public, non-commercial third-party website. Ask separately about metadata reuse, framing, refresh intervals, attribution, caching, hotlinking, quotas, and takedown requests.
