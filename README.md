@@ -33,3 +33,4 @@ This repository includes a static `vercel.json` configuration. A deployment is n
 - [Port plan and verification gates](MERCURY_PLUS_PORT_PLAN.md)
 - [HCMC camera source and permission audit](docs/CAMERA_SOURCE_AUDIT.md)
 - [Bilingual camera permission request](docs/CAMERA_PERMISSION_REQUEST.md)
+- [God's Eye View feature parity matrix](docs/GEV_PARITY_MATRIX.md)
