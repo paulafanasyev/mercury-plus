@@ -421,6 +421,162 @@
   loadWeatherButton.addEventListener('click', loadHcmcWeather);
   refreshWeatherButton.addEventListener('click', loadHcmcWeather);
 
+  // On-demand regional earthquake catalogue from USGS ComCat.
+  const earthquakeLayerStatus = document.getElementById('earthquakeLayerStatus');
+  const loadEarthquakesButton = document.getElementById('loadEarthquakesButton');
+  const earthquakeCard = document.getElementById('earthquakeCard');
+  const earthquakeSummary = document.getElementById('earthquakeSummary');
+  const earthquakeUpdated = document.getElementById('earthquakeUpdated');
+  const earthquakeMessage = document.getElementById('earthquakeMessage');
+  const focusEarthquakesButton = document.getElementById('focusEarthquakesButton');
+  const earthquakeLayer = L.featureGroup();
+  let earthquakeLoaded = false;
+  let earthquakeVisible = false;
+  let earthquakeRequest = null;
+
+  function earthquakeDate(timestamp) {
+    const number = Number(timestamp);
+    if (!Number.isFinite(number)) return 'Время не указано';
+    return new Date(number).toLocaleString('ru-RU', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh'
+    }) + ' · Вьетнам';
+  }
+
+  function earthquakePopup(feature) {
+    const props = feature.properties || {};
+    const coords = feature.geometry.coordinates || [];
+    const depth = Number(coords[2]);
+    const popup = document.createElement('div');
+    popup.className = 'earthquake-popup';
+    const heading = document.createElement('strong');
+    heading.textContent = 'M ' + Number(props.mag).toFixed(1);
+    popup.appendChild(heading);
+
+    const place = document.createElement('p');
+    place.textContent = String(props.place || 'Место события не указано');
+    popup.appendChild(place);
+
+    const details = document.createElement('small');
+    details.textContent = earthquakeDate(props.time) + ' · глубина ' +
+      (Number.isFinite(depth) ? depth.toFixed(1) + ' км' : 'не указана');
+    popup.appendChild(details);
+
+    if (typeof props.url === 'string' && props.url.startsWith('https://earthquake.usgs.gov/')) {
+      const link = document.createElement('a');
+      link.href = props.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'ОТКРЫТЬ КАРТОЧКУ USGS ↗';
+      popup.appendChild(link);
+    }
+    return popup;
+  }
+
+  function renderEarthquakes(features) {
+    earthquakeLayer.clearLayers();
+    features.forEach(feature => {
+      const coordinates = feature.geometry && feature.geometry.coordinates;
+      if (!Array.isArray(coordinates) || coordinates.length < 2) return;
+      const longitude = Number(coordinates[0]);
+      const latitude = Number(coordinates[1]);
+      const magnitude = Number(feature.properties && feature.properties.mag);
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude) ||
+          latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180 ||
+          !Number.isFinite(magnitude)) return;
+      const radius = Math.max(5, Math.min(13, 3 + magnitude * 1.8));
+      const marker = L.circleMarker([latitude, longitude], {
+        radius,
+        color: '#122936',
+        weight: 1.5,
+        fillColor: magnitude >= 5 ? '#e98c6b' : '#e7bd68',
+        fillOpacity: 0.88
+      });
+      marker.bindPopup(earthquakePopup(feature));
+      earthquakeLayer.addLayer(marker);
+    });
+  }
+
+  async function loadEarthquakes() {
+    if (earthquakeRequest) return earthquakeRequest;
+    if (earthquakeLoaded) {
+      if (earthquakeVisible) {
+        map.removeLayer(earthquakeLayer);
+        earthquakeVisible = false;
+        loadEarthquakesButton.textContent = 'ПОКАЗАТЬ МЕТКИ';
+        earthquakeLayerStatus.textContent = 'LOADED';
+      } else {
+        earthquakeLayer.addTo(map);
+        earthquakeVisible = true;
+        loadEarthquakesButton.textContent = 'СКРЫТЬ МЕТКИ';
+        earthquakeLayerStatus.textContent = 'VISIBLE';
+      }
+      return;
+    }
+
+    loadEarthquakesButton.disabled = true;
+    loadEarthquakesButton.textContent = 'ЗАГРУЖАЮ…';
+    earthquakeLayerStatus.textContent = 'LOADING';
+    earthquakeLayerStatus.classList.remove('status-live', 'status-off');
+    earthquakeLayerStatus.classList.add('status-pending');
+    earthquakeMessage.textContent = 'Запрашиваю региональный каталог USGS…';
+    earthquakeCard.hidden = false;
+
+    earthquakeRequest = (async () => {
+      try {
+        const response = await fetch('/api/earthquakes', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store',
+          signal: AbortSignal.timeout(15000)
+        });
+        let payload;
+        try { payload = await response.json(); }
+        catch (_) { throw new Error('USGS вернул некорректный ответ.'); }
+        if (!response.ok) throw new Error(payload.error || 'Каталог землетрясений недоступен (HTTP ' + response.status + ').');
+        const features = Array.isArray(payload.features) ? payload.features : [];
+        renderEarthquakes(features);
+        earthquakeLoaded = true;
+        if (earthquakeLayer.getLayers().length) {
+          earthquakeLayer.addTo(map);
+          earthquakeVisible = true;
+          loadEarthquakesButton.textContent = 'СКРЫТЬ МЕТКИ';
+          earthquakeLayerStatus.textContent = earthquakeLayer.getLayers().length + ' EVENTS';
+          earthquakeLayerStatus.classList.remove('status-pending', 'status-off');
+          earthquakeLayerStatus.classList.add('status-live');
+          focusEarthquakesButton.hidden = false;
+          earthquakeMessage.textContent = 'Метки загружены. Нажмите на точку для магнитуды, глубины, времени и ссылки на источник.';
+        } else {
+          earthquakeLayerStatus.textContent = 'NO EVENTS';
+          earthquakeLayerStatus.classList.remove('status-pending');
+          earthquakeLayerStatus.classList.add('status-live');
+          loadEarthquakesButton.textContent = 'ПРОВЕРИТЬ СНОВА';
+          earthquakeMessage.textContent = 'В выбранном радиусе и временном диапазоне событий не найдено.';
+        }
+        earthquakeSummary.textContent = features.length + ' событий · магнитуда ≥ 3,5';
+        earthquakeUpdated.textContent = 'Каталог USGS обновлён: ' + earthquakeDate(payload.metadata && payload.metadata.generated);
+      } catch (error) {
+        earthquakeLayerStatus.textContent = 'UNAVAILABLE';
+        earthquakeLayerStatus.classList.remove('status-live', 'status-pending');
+        earthquakeLayerStatus.classList.add('status-off');
+        earthquakeMessage.textContent = error && error.message
+          ? error.message
+          : 'Не удалось загрузить каталог USGS. Повторите запрос позже.';
+        loadEarthquakesButton.textContent = 'ПОВТОРИТЬ ЗАПРОС';
+      } finally {
+        loadEarthquakesButton.disabled = false;
+        earthquakeRequest = null;
+      }
+    })();
+    return earthquakeRequest;
+  }
+
+  loadEarthquakesButton.addEventListener('click', loadEarthquakes);
+  focusEarthquakesButton.addEventListener('click', () => {
+    const bounds = earthquakeLayer.getBounds();
+    if (bounds && bounds.isValid()) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 7 });
+  });
+
   const dialog = document.getElementById('aboutDialog');
   document.getElementById('aboutButton').addEventListener('click', () => dialog.showModal());
   document.getElementById('closeAbout').addEventListener('click', () => dialog.close());

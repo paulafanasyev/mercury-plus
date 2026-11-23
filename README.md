@@ -12,6 +12,7 @@ Mercury Plus is an experimental browser map workspace for Ho Chi Minh City. It p
 - Responsive layer catalogue and explicit pending/offline states.
 - No live public-transport or infrastructure feed is connected. MultiGo is linked as the official HCMC bus app; a third-party feed requires operator authorization. A CC BY-NC 4.0 historical flood dataset (425 geolocated cases, 2002–2026) has been identified, but its GeoPackage geometry is not yet converted into the map. Current HCMC model weather conditions are available on demand through Open-Meteo; values are model estimates, not station readings or hazard alerts. The camera catalogue is not embedded; official portal terms require prior written permission for reuse.
 - User-triggered driving directions between two map points via a bounded same-origin API endpoint and the OSRM demo server; one route request per action, with OSRM/OSM attribution and no live-traffic claim.
+- On-demand regional earthquake markers from the USGS ComCat API: 12 months, 1,000 km radius from HCMC, magnitude ≥3.5, with event details and source links. This is a catalogue view, not an alert or forecast.
 - On-demand HCMC weather conditions from Open-Meteo with visible timestamp and attribution; no background polling or API key.
 - Place search is intentionally disabled until an appropriate geocoding provider and usage controls are selected.
 
@@ -39,6 +40,7 @@ This repository includes a static `vercel.json` configuration. A deployment is n
 - [God's Eye View feature parity matrix](docs/GEV_PARITY_MATRIX.md)
 - [Production routing verification](docs/ROUTING_VERIFICATION.md)
 - [Open-Meteo source and weather-layer audit](docs/WEATHER_SOURCE_AUDIT.md)
+- [USGS regional earthquake-layer audit](docs/USGS_EARTHQUAKES_AUDIT.md)
 - [Public-transit source and API-access audit](docs/TRANSIT_SOURCE_AUDIT.md)
 - [Bilingual public-transit data-access request](docs/PUBLIC_TRANSPORT_ACCESS_REQUEST.md)
 - [Historical HCMC flood archive audit](docs/HISTORICAL_FLOOD_ARCHIVE_AUDIT.md)

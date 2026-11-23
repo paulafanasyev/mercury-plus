@@ -7,7 +7,7 @@
 
 ## Executive status
 
-Mercury Plus is still a small Leaflet application, not a port of God's Eye View. Production has an HCMC-centred OSM map, a Public Cameras section linking to the official portal, user-triggered driving routes and an on-demand Open-Meteo model-weather card. The official camera portal's terms expressly require prior written permission for reuse; no camera snapshots/video are embedded. No upstream GEV application modules have been imported.
+Mercury Plus is still a small Leaflet application, not a port of God's Eye View. Production has an HCMC-centred OSM map, an official camera-portal link (images/video gated by prior written permission), user-triggered driving routes, on-demand Open-Meteo model weather and a user-triggered USGS regional earthquake layer. The MultiGo bus app and historical-flood dataset are linked as discovered sources, but neither has a live/map integration yet. No upstream GEV application modules have been imported.
 
 **Production verification:** Vercel deployment `dpl_4QG17oNFZEoP2bWxiCiJEULgFuSQ`, commit `81b628ac59536cc04eda2c8ce2b79d25f8f74116`, state **READY**. Public page returned HTTP 200 and the live HTML contains the route planner controls and Public Cameras section. The same-origin route API returned HTTP 200 for a central-HCMC test route and HTTP 400 for malformed coordinates. The browser click-to-route interaction has not yet been manually tested on a physical device.
 
@@ -44,7 +44,7 @@ Status vocabulary:
 | Flooding / rainfall / drainage context | **PARTIAL — SOURCE IDENTIFIED, NOT YET MAPPED** — historical archive of 425 geolocated events (2002–2026), plus flood recurrence road layer; no current sensor/API feed | Hardy & Radziute, DataSuds/IRD DOI 10.23708/8Y16HU. GeoPackage point layer EPSG:9210 and tabular file with 425 rows/22 attributes; archive assembled from 53 sources, mainly local media | CC BY-NC 4.0: attribution + link to licence, non-commercial use only. Extract GeoPackage points, transform EPSG:9210 to WGS84, reconcile 2025 ward boundaries and keep event date/cause/depth/source visible. Mark archive-only; never portray as current flooding or forecast. Still need an official live sensor/hydrology source | High |
 | Tropical cyclone warnings | **NOT IMPLEMENTED** | Relevant to the Western Pacific | Prefer authoritative Vietnam/Western Pacific warning feeds; GEV NHC/CPHC US-centric products are not a substitute for local warnings | Medium |
 | Active fires | **NOT IMPLEMENTED** | Regional context | NASA FIRMS API/key and current terms; label satellite detections and observation time, not ground-confirmed fires | Low |
-| Earthquakes | **NOT IMPLEMENTED** | Regional/global context | USGS GeoJSON is a potential no-key source; verify current API policy and label magnitude/location/time as provider-reported | Low |
+| Earthquakes | **PARTIAL — PRODUCTION API + UI IMPLEMENTED** — user-triggered USGS layer, 10 verified events over 12 months in a 1,000 km radius, M≥3.5 | USGS ComCat FDSN GeoJSON API. No events were found within 500 km over the last 30 days; 10 M4.1–4.5 events were found within 1,000 km over the last 12 months, mainly central Vietnam | No key. Display magnitude/place/depth/provider time and USGS event-page link; show the search radius/window and catalogue generation time. Not a local warning, real-time sensor or forecast. API response is cached 15 min | Medium |
 | Radio / audio | **NOT IMPLEMENTED** | Optional, not core to HCMC situational awareness | Radio Browser metadata is not a blanket licence for station audio; each stream has its own terms and copyright | Low |
 | News / general events | **NOT IMPLEMENTED** | Could be useful only with vetted local feeds | Source attribution, publication time, geolocation confidence and misinformation controls needed | Low |
 | US-specific restricted airspace, military/site overlays and other national packs | **EXCLUDE** unless a directly relevant, lawfully published HCMC source is found | Most source packs are not HCMC data | Never relabel US or other country data as HCMC. Avoid sensitive infrastructure and security-sensitive datasets | Exclude |
@@ -59,6 +59,36 @@ Status vocabulary:
 - **Public bus data:** MultiGo states it is the official HCMC bus app and documents real-time estimated arrivals; the app listing says the vehicle arrival feature is real-time. No third-party developer API or redistribution licence was found. Mercury Plus therefore links to the official app and records access as pending.
 - **Historical flood archive:** Hardy & Radziute (2026), [DOI 10.23708/8Y16HU](https://doi.org/10.23708/8Y16HU), has 425 geolocated observations from 2002–2026, 22 attributes and 53 sources. Its GeoPackage point layer is EPSG:9210; a separate tabular file contains the 425 attribute rows. Licence CC BY-NC 4.0. Geometry conversion and validation are still required before map display.
 - **Overpass:** A small read-only public query around central HCMC returned HTTP 502 because the public query server was at capacity. No production Places layer is enabled against that overloaded endpoint.
+
+
+
+## Additional current-upstream capabilities — snapshot 2026-11-23
+
+The upstream `main` branch was re-read on 2026-11-23. It contains 5,272 tracked paths and identifies itself as version 0.3.0. Its current README adds or explicitly documents the following capabilities beyond a simple map-layer list:
+
+| Current upstream capability | Mercury Plus status | HCMC decision / next requirement |
+|---|---|---|
+| GNSS integrity / navigation-accuracy context | **NOT IMPLEMENTED** | adsb.lol and GPSJAM aggregation; no validated HCMC coverage/rights yet. An anomaly must never be labelled confirmed jamming or interference |
+| Fire perimeter boundaries and containment | **NOT IMPLEMENTED** | Upstream WFIGS/NIFC source is US-focused; not a suitable HCMC layer. Find an authorized Vietnamese incident-perimeter source before use |
+| Simulated road traffic driven by live flow speeds | **NOT IMPLEMENTED** | This is explicitly a simulation, not live positions of individual vehicles. TomTom speed/congestion feed requires key and current terms review; no HCMC traffic provider approved yet |
+| Air quality / AQHI | **EXCLUDE current upstream provider** | Upstream first source is Environment and Climate Change Canada (Canada only). Find a Vietnam-capable source with a documented licence before implementing |
+| Satellite scene / recent imagery and six-class orbital catalogue | **NOT IMPLEMENTED** | CelesTrak TLE/SATCAT and imagery catalogue; HCMC-specific scene availability and imagery rights must be checked per source |
+| Military flights | **NOT IMPLEMENTED** | ADS-B-derived emergency/military classifications are provider-level labels and may be incomplete; exclude by default from the public HCMC pilot unless a clear, non-sensitive public-interest case is established |
+| News and conflict panel | **NOT IMPLEMENTED** | GDELT plus optional World News API and Liveuamap. Local geolocation can be wrong; World News API terms require prior permission for caching and Liveuamap items require a paid API. Do not imply verified incident reports |
+| Radio tuner / broadcaster directory | **NOT IMPLEMENTED** | Radio Browser is a station directory, not a blanket audio redistribution licence. Every station's stream rights and geolocation need review |
+| Wildlife sightings | **EXCLUDE upstream regional pack** | Current README describes iNaturalist and Acartia/Salish Sea focus. No verified HCMC feed or permission/coverage is established |
+| OpenAI/Gemini voice control and AI HUD | **NOT IMPLEMENTED** | Needs provider keys/OAuth, server-side ephemeral tokens, user-visible cost limits and privacy controls. OpenAI and Gemini usage can be metered. Not required for the first HCMC data pilot |
+| Time rail, delayed playback, selected-entity trails and scene history | **NOT IMPLEMENTED** | Requires timestamped feeds, explicit retention/licensing policy and stale-data semantics. Static snapshots must not be presented as continuous history |
+| Saved view/share links, annotations, cockpit/tool panels and MCP tools | **NOT IMPLEMENTED** | Significant UI/application architecture port; preserve state schema and permission boundaries when porting |
+| Camera pose calibration, image/video modes and camera mesh scheduling | **NOT IMPLEMENTED** | GEV has provider-specific camera adapters and opt-in legal gates. HCMC camera content remains blocked by the official portal's prior-written-permission requirement |
+
+### Current upstream stack and port size
+
+- Upstream package version: `0.3.0`; package declares MIT, Vue 3, Pinia, CesiumJS, Vite 6, HLS.js, satellite.js, MapillaryJS, H3 and other spatial/media packages.
+- Current engine requirement: Node `>=24.14.0 <25 || >=26 <27`; Mercury Plus has not been migrated to this stack.
+- Upstream has 5,272 tracked tree entries, including approximately 4,301 under `src/`, 181 under `server/` and 194 scripts. A true source port is a separate migration project, not a small patch.
+- Upstream has provider-specific server adapters for CCTV, traffic, transit, rail, flights, vessels, space, maps, weather, OpenAI, radio, Overpass and other sources. Copying a provider adapter does not confer rights to its data.
+- Upstream's MIT code licence does not override data-provider terms. Only selected local packs may be carried after the file-level audit.
 
 ## Camera decision and next actions
 

@@ -78,6 +78,15 @@
           <div class="layer-row"><span><b>Исторические подтопления</b><small>425 геопривязанных событий · 2002–2026</small></span><span class="status status-pending">ARCHIVE FOUND</span></div>
           <a class="source-link" href="https://doi.org/10.23708/8Y16HU" target="_blank" rel="noopener noreferrer">OPEN FLOOD RESEARCH DATA ↗</a>
           <p class="layer-note">Архив CC BY-NC 4.0 найден; геометрия GeoPackage ещё не преобразована в слой карты. Это исторические случаи, не текущие датчики, предупреждения или прогноз.</p>
+          <div class="layer-row"><span><b>Землетрясения региона</b><small>USGS · 12 месяцев · радиус 1 000 км · M ≥ 3,5</small></span><span id="earthquakeLayerStatus" class="status status-pending">NOT LOADED</span></div>
+          <button id="loadEarthquakesButton" class="earthquake-load-button" type="button">ЗАГРУЗИТЬ ЗЕМЛЕТРЯСЕНИЯ</button>
+          <section id="earthquakeCard" class="earthquake-card" hidden aria-live="polite" aria-label="Региональные землетрясения">
+            <div class="earthquake-card-head"><strong id="earthquakeSummary">—</strong><small id="earthquakeUpdated">Источник ещё не запрашивался</small></div>
+            <p id="earthquakeMessage" class="earthquake-message"></p>
+            <button id="focusEarthquakesButton" class="earthquake-action" type="button" hidden>ПОКАЗАТЬ РЕГИОН НА КАРТЕ</button>
+            <p class="earthquake-disclaimer">События каталога USGS в радиусе 1 000 км от Хошимина за последние 12 месяцев, магнитуда от 3,5. Это не прогноз, не датчики в реальном времени и не официальное местное предупреждение. Для просмотра удалённых точек карта приблизится к региону.</p>
+            <a class="earthquake-attribution" href="https://earthquake.usgs.gov/" target="_blank" rel="noopener noreferrer">Source: USGS Earthquake Hazards Program · ComCat</a>
+          </section>
         </div>
         <div class="sidebar-footer"><span class="footer-pulse"></span> PILOT DATA GATE ACTIVE <small>Unverified layers are not displayed.</small></div>
       </aside>

@@ -99,3 +99,24 @@
   .weather-card{margin-bottom:8px}
   .weather-main strong{font-size:22px}
 }
+
+
+/* On-demand USGS regional earthquakes */
+.earthquake-load-button{display:block;width:calc(100% - 21px);margin:4px 0 8px 21px;min-height:34px;padding:8px 10px;text-align:left;border:1px solid #65533a;background:#302719;color:#f0d18a;font:9px 'DM Mono',monospace;letter-spacing:.5px;cursor:pointer}
+.earthquake-load-button:hover,.earthquake-action:hover{background:#45351f;border-color:#a68a53}
+.earthquake-load-button:disabled{opacity:.55;cursor:wait}
+.earthquake-card{margin:5px 0 9px 21px;padding:11px 10px;background:#171b20;border:1px solid #51452e}
+.earthquake-card[hidden]{display:none}
+.earthquake-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding-bottom:8px;border-bottom:1px solid #3a3327}
+.earthquake-card-head strong{font:11px 'DM Mono',monospace;color:#f1d38e}
+.earthquake-card-head small{max-width:125px;text-align:right;color:#8c999c;font:8px/1.45 'DM Mono',monospace}
+.earthquake-message{margin:8px 0;color:#c4d0d1;font-size:9px;line-height:1.5}
+.earthquake-action{width:100%;min-height:32px;padding:7px 8px;border:1px solid #65533a;background:#302719;color:#f0d18a;font:8px 'DM Mono',monospace;letter-spacing:.4px;cursor:pointer}
+.earthquake-action[hidden]{display:none}
+.earthquake-disclaimer{margin:8px 0;color:#8b9ba1;font-size:8px;line-height:1.55}
+.earthquake-attribution{display:inline-block;color:#e7c77f;font:8px 'DM Mono',monospace;text-decoration:underline;text-underline-offset:2px}
+.earthquake-popup{min-width:180px;color:#17303c}
+.earthquake-popup strong{font:14px 'DM Mono',monospace;color:#a15d36}
+.earthquake-popup p{margin:5px 0;font-size:11px;line-height:1.4}
+.earthquake-popup small{display:block;color:#5f727a;font-size:9px;line-height:1.45}
+.earthquake-popup a{display:inline-block;margin-top:7px;color:#276d82;font:9px 'DM Mono',monospace}
