@@ -50,3 +50,28 @@
 .source-link{display:block;margin:4px 0 4px 21px;width:calc(100% - 21px);padding:9px 10px;border:1px solid #31515c;background:#102a36;color:#9de7dc;text-decoration:none;font:9px 'DM Mono',monospace;letter-spacing:.5px}
 .source-link:hover{background:#173b45;border-color:#4b8d8a;color:#b8fff0}
 .layer-note{margin:6px 0 4px 21px;color:#8fa3ad;font-size:9px;line-height:1.55}
+
+/* HCMC driving route planner */
+.route-toggle.is-active{background:#173b45;color:#9ff0df;box-shadow:inset 0 0 0 1px #397b7c}
+.route-panel{position:absolute;z-index:900;top:66px;right:17px;width:min(360px,calc(100% - 34px));max-height:calc(100% - 120px);overflow:auto;background:#091a26f2;border:1px solid #385563;box-shadow:0 14px 42px #0009;padding:14px;color:#d8e6eb}
+.route-panel[hidden]{display:none}
+.route-panel-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #29404c;padding-bottom:10px}
+.route-panel-head b{display:block;font:10px 'DM Mono',monospace;letter-spacing:1px;color:#a9efe3}
+.route-panel-head small{display:block;margin-top:5px;font:8px 'DM Mono',monospace;letter-spacing:.8px;color:#849da8}
+.route-close{width:28px;height:28px;background:transparent;border:1px solid #36505d;color:#b7c8cf;font-size:18px;cursor:pointer}
+.route-status{font-size:10px;line-height:1.55;color:#9bb2bd;margin:11px 0}
+.route-point{display:flex;align-items:center;gap:9px;margin:8px 0;font-size:10px;color:#dce8ec}
+.route-point-letter{display:inline-flex;align-items:center;justify-content:center;flex:none;width:20px;height:20px;border-radius:50%;font:10px 'DM Mono',monospace;color:#06141d}
+.route-a{background:#68d8b9}.route-b{background:#e9b76c}
+.route-summary{margin:12px 0 8px;padding:10px;background:#102b37;border-left:2px solid #63d8c6;font:10px 'DM Mono',monospace;color:#d5e7eb}
+.route-steps{margin:0;padding:0 0 0 22px;max-height:240px;overflow:auto;color:#a9bbc3;font-size:10px;line-height:1.45}
+.route-steps li{padding:6px 0;border-bottom:1px solid #1c3440}
+.route-steps li span{display:block;color:#78919d;font:8px 'DM Mono',monospace;margin-top:3px}
+.route-disclaimer{margin:12px 0 9px;color:#7f99a5;font-size:9px;line-height:1.5}
+.route-panel-actions button{width:100%;min-height:34px;background:#112c38;border:1px solid #365966;color:#a9e9df;font:8px 'DM Mono',monospace;letter-spacing:.7px;cursor:pointer}
+.route-panel-actions button:hover{background:#173b45;border-color:#4d9990}
+@media(max-width:760px){
+  .route-panel{top:84px;right:10px;width:min(360px,calc(100% - 20px));max-height:calc(100% - 120px);padding:12px}
+  .route-steps{max-height:170px}
+  .route-toggle span{display:inline!important;font-size:8px}
+}
