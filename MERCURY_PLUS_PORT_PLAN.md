@@ -75,11 +75,13 @@ These are discovery candidates, not blanket data permissions. For each selected 
 - [ ] Browser runtime smoke test passes.
 - [ ] Vercel deployment and public URL verified.
 
-## Current verified status — 2026-11-21
-- Repository exists on `main`; GitHub API currently reports visibility **Private**, not Public.
-- Upstream `bilawalsidhu/gods-eye-view` main inspected at `ae212e5b631ed16cbe3d605abecdf105a1be8df3`; recursive tree contained 5,075 entries.
-- Stack identified: Vue 3, Pinia, CesiumJS, Vite.
-- Initial source-rights triage and HCMC source discovery are documented separately.
-- No upstream application source has yet been imported; no npm build, browser runtime test, or Vercel deployment has been performed.
-- The connected GitHub integration exposes Git object creation (blobs/trees/commits) but no repository visibility update operation. Visibility remains an owner-side setting unless an authorized control becomes available.
-- Next implementation step: create a small, reviewable pilot source import from upstream (with notices and exclusions), then adapt the application shell and map defaults for HCMC. Do not claim a runnable pilot until build and browser verification pass.
+## Current verified status — 2026-11-23
+
+- GitHub repository `paulafanasyev/mercury-plus`: **PUBLIC — VERIFIED** by GitHub repository metadata.
+- The deployed Vercel pilot was previously verified READY at `https://mercury-plus.vercel.app/`; the deployed page served HTTP 200 and the Leaflet/OSM map loaded. This is a static pilot shell, not the upstream God's Eye View application.
+- Current source remains a small static Leaflet application. It has no imported upstream application modules and no live HCMC transport, weather, flood, infrastructure, or camera data feeds.
+- The camera UI now links to the official HCMC traffic-camera map. Camera snapshots/video are intentionally not embedded pending written permission or clear official reuse/framing terms.
+- HCMC camera metadata endpoints have been observed in community synchronization code, but that does not establish official API support or permission to republish metadata/images/video.
+- Upstream God's Eye View code is MIT-licensed, but its own source manifest makes clear that third-party data/assets have separate conditions; some CCTV providers are disabled unless written agreements exist.
+- This branch contains the first camera-source permission gate and audit. No full upstream source import, camera-feed integration, npm build, or browser runtime test is claimed.
+- Next blockers: obtain operator permission/terms for public third-party embedding; select a compliant camera catalogue and direct-image/HLS mode; then implement and test an on-demand camera layer. In parallel, continue the upstream port as a separate major milestone.
