@@ -61,8 +61,21 @@
       <section class="map-stage" aria-label="Ho Chi Minh City map">
         <div class="map-toolbar">
           <div class="map-location"><span class="pin">⌖</span><span><b>THÀNH PHỐ HỒ CHÍ MINH</b><small>VIETNAM · INITIAL PILOT AREA</small></span></div>
-          <div class="map-actions"><div class="map-mode-switch" role="group" aria-label="Map style"><button id="streetMode" class="map-mode-button is-active" type="button" aria-pressed="true">КАРТА</button><button id="satelliteMode" class="map-mode-button" type="button" aria-pressed="false">СПУТНИК</button></div><button id="homeButton" class="map-button">◎ <span>RESET VIEW</span></button><button id="zoomIn" class="map-button" aria-label="Zoom in">＋</button><button id="zoomOut" class="map-button" aria-label="Zoom out">−</button></div>
+          <div class="map-actions"><div class="map-mode-switch" role="group" aria-label="Map style"><button id="streetMode" class="map-mode-button is-active" type="button" aria-pressed="true">КАРТА</button><button id="satelliteMode" class="map-mode-button" type="button" aria-pressed="false">СПУТНИК</button></div><button id="routeButton" class="map-button route-toggle" type="button" aria-label="Build a driving route">⌁ <span>МАРШРУТ</span></button><button id="homeButton" class="map-button">◎ <span>RESET VIEW</span></button><button id="zoomIn" class="map-button" aria-label="Zoom in">＋</button><button id="zoomOut" class="map-button" aria-label="Zoom out">−</button></div>
         </div>
+        <section id="routePanel" class="route-panel" aria-label="Планировщик маршрута" hidden>
+          <div class="route-panel-head">
+            <div><b>МАРШРУТ А—Б</b><small>ХОШИМИН · АВТОМОБИЛЬ</small></div>
+            <button id="closeRoutePanel" class="route-close" type="button" aria-label="Закрыть маршрут">×</button>
+          </div>
+          <p id="routeStatus" class="route-status" aria-live="polite">Нажмите на «МАРШРУТ», затем выберите две точки на карте.</p>
+          <div class="route-point"><span class="route-point-letter route-a">A</span><span id="routeStartText">Начальная точка не выбрана</span></div>
+          <div class="route-point"><span class="route-point-letter route-b">B</span><span id="routeEndText">Конечная точка не выбрана</span></div>
+          <div id="routeSummary" class="route-summary" hidden></div>
+          <ol id="routeSteps" class="route-steps"></ol>
+          <p class="route-disclaimer">Маршрут по дорожной сети OpenStreetMap через OSRM. Это не данные о текущих пробках; расчёт времени ориентировочный. Публичный демонстрационный сервер работает без гарантии доступности и ограничен частотой запросов.</p>
+          <div class="route-panel-actions"><button id="clearRoute" type="button">СБРОСИТЬ И ВЫБРАТЬ СНОВА</button></div>
+        </section>
         <div id="map"></div>
         <div class="map-coordinates"><span>10°46'37.0"N</span><span>106°42'03.2"E</span><span class="coord-sep">·</span><span>WGS 84</span></div>
         <div class="map-legend"><span class="legend-dot"></span> <span id="baseMapStatus">STREET MAP · LIVE</span> <span class="legend-sep">|</span> <span class="legend-muted">CITY FEEDS PENDING · CAMERA EMBED NOT CLEARED</span></div>
