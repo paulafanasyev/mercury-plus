@@ -46,8 +46,9 @@ Attribute the feed to the **USGS Earthquake Hazards Program / ComCat** and link 
 
 - USGS endpoint and query format: **VERIFIED**.
 - Test response HTTP 200 with 10 features: **VERIFIED**.
-- Production API endpoint and map markers: to be rechecked after deployment.
-- Manual browser click-through on a physical device: **NOT PROVEN**.
+- Production `/api/earthquakes` endpoint: **VERIFIED**; HTTP 200 and 10 GeoJSON features returned on 2026-11-23.
+- Production HTML contains the earthquake load/card/focus controls: **VERIFIED**.
+- Manual map-marker click-through, popup rendering and focus-button interaction on a physical browser/device: **NOT PROVEN**.
 
 ## References
 

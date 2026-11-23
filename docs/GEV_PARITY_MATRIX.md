@@ -9,7 +9,7 @@
 
 Mercury Plus is still a small Leaflet application, not a port of God's Eye View. Production has an HCMC-centred OSM map, an official camera-portal link (images/video gated by prior written permission), user-triggered driving routes, on-demand Open-Meteo model weather and a user-triggered USGS regional earthquake layer. The MultiGo bus app and historical-flood dataset are linked as discovered sources, but neither has a live/map integration yet. No upstream GEV application modules have been imported.
 
-**Production verification:** Vercel deployment `dpl_4QG17oNFZEoP2bWxiCiJEULgFuSQ`, commit `81b628ac59536cc04eda2c8ce2b79d25f8f74116`, state **READY**. Public page returned HTTP 200 and the live HTML contains the route planner controls and Public Cameras section. The same-origin route API returned HTTP 200 for a central-HCMC test route and HTTP 400 for malformed coordinates. The browser click-to-route interaction has not yet been manually tested on a physical device.
+**Production verification:** Vercel deployment `dpl_4XjrE2jByuMWxm5iQ3m3fCM28wbL`, commit `df18c53d603ff7122f8da5f2a8af688f8e7076e8`, state **READY**. Public page returned HTTP 200; production HTML contains the camera portal, route panel, on-demand weather panel, MultiGo and historical-flood source links, and the regional earthquake controls. Production `/api/route` returned HTTP 200 for a central-HCMC test route; `/api/earthquakes` returned HTTP 200 with 10 USGS GeoJSON features. The UI/API are verified separately; full manual browser interaction on a physical device is still pending.
 
 Status vocabulary:
 - **VERIFIED** — current implementation or source fact has been inspected.
@@ -136,14 +136,14 @@ The upstream `main` branch was re-read on 2026-11-23. It contains 5,272 tracked 
 ## Verification boundary
 
 - GitHub repository visibility: **PUBLIC — VERIFIED**.
-- Main commit: `81b628ac59536cc04eda2c8ce2b79d25f8f74116`.
-- Production deployment: **READY — VERIFIED**; HTTP 200; live HTML contains route controls and the camera section.
-- Production route API: **VERIFIED** for one central-HCMC test (HTTP 200; 1,312.6 m; 129.5 s estimated; 7 manoeuvre steps) and malformed input (HTTP 400).
-- Route panel elements are present in production HTML; a manual browser/device click-through remains **NOT PROVEN**.
-- Driving route times are OSRM estimates from road-network data, **not live traffic**.
-- Rate limiting is per client and per warm serverless instance, not a global cross-instance guarantee; do not treat the public demo integration as ready for mass traffic.
-- Official camera portal link in Mercury Plus: **VERIFIED**.
-- HCMC image/HLS embedding permission: **NOT VERIFIED**.
-- Live camera media inside Mercury Plus: **NOT IMPLEMENTED**.
+- Main commit: `df18c53d603ff7122f8da5f2a8af688f8e7076e8`.
+- Production deployment: **READY — VERIFIED** (`dpl_4XjrE2jByuMWxm5iQ3m3fCM28wbL`); HTTP 200; live HTML contains camera, route, weather, transit-source, flood-archive and earthquake controls.
+- Production route API: **VERIFIED** (HTTP 200; 1,312.6 m; 129.5 s estimated; 7 manoeuvre steps); malformed coordinates: HTTP 400.
+- Production Open-Meteo endpoint: **VERIFIED** (HTTP 200 test); browser weather interaction not manually tested on a physical device.
+- Production USGS earthquake API: **VERIFIED** (HTTP 200; 10 GeoJSON events; last 12 months; radius 1,000 km; M≥3.5).
+- Earthquake controls and route/weather controls are present in production HTML; actual marker rendering and physical-device click-through are **NOT PROVEN**.
+- Driving route times are OSRM road-network estimates, **not live traffic**. The route API guard is per warm serverless instance, not a global cross-instance rate limit.
+- Official camera portal link in Mercury Plus: **VERIFIED**. HCMC image/HLS embedding rights require prior written permission; **NOT OBTAINED**. Live camera media inside Mercury Plus: **NOT IMPLEMENTED**.
+- MultiGo's public third-party API/reuse permission: **NOT VERIFIED**. Historical flood geometry has not been converted to Leaflet GeoJSON: **NOT IMPLEMENTED**.
 - Full GEV source port and feature parity: **NOT IMPLEMENTED**.
 - Android, Hanoi and Купол remain out of scope.
